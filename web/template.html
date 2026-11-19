@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cave Crossword</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one column, a map plate on black like an inked dungeon page; controls as a slim
+   toolbar above it, clues in two columns below. Deliberately single-theme (ink on black). */
+:root {
+  --ink: #0c0c0c; --plate: #141414; --bone: #ece7da; --dim: #9b968a; --rule: #2b2a27;
+  --rust: #c0472f; --paper: #fafafa;
+  --f-display: "IM Fell English SC", Georgia, serif;
+  --f-body: "Spectral", Georgia, "Times New Roman", serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box }
+html, body { background: var(--ink); color: var(--bone) }
+body { margin: 0; font: 16px/1.5 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px }
+.wrap { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); margin: 0; letter-spacing: 0.04em }
+header p { margin: 0; color: var(--dim); max-width: 62ch }
+.bar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; padding: 14px; background: var(--plate); border: 1px solid var(--rule); border-radius: 4px }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0 }
+.field label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim) }
+input, select, button { font: inherit; color: var(--bone); background: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 6px 10px }
+input#theme { width: min(360px, 80vw) } input#seed { width: 96px } input#title { width: min(240px, 70vw) }
+button { cursor: pointer }
+button.go { background: var(--rust); border-color: var(--rust); color: var(--paper); font-weight: 600 }
+button:hover { border-color: var(--rust) } button:disabled { opacity: 0.55; cursor: progress }
+:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px }
+.check { display: flex; gap: 6px; align-items: center; color: var(--dim); font-size: 14px }
+#status { color: var(--dim); font-size: 14px; min-height: 1.5em; margin: 0 }
+#map svg { width: 100%; height: auto; display: block; max-width: 100% }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px 36px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; letter-spacing: 0.1em; margin: 0 0 6px; border-bottom: 1px solid var(--rule) }
+ol { margin: 0; padding-left: 2.4em }
+li { padding: 2px 0 } li::marker { color: var(--dim); font-variant-numeric: tabular-nums }
+li.adv::marker, li.adv .clue { color: #f0c9b8 } li.adv::marker { color: var(--rust) }
+.clue { outline: none; border-bottom: 1px dashed transparent } .clue:focus { border-bottom-color: var(--rust) }
+.clue.empty { color: var(--rust); font-style: italic }
+.len { color: var(--dim) }
+.alt { padding: 0 6px; font-size: 13px; color: var(--dim); background: none }
+.ans { display: none; color: var(--dim); font-size: 13px; letter-spacing: 0.08em }
+body.key .ans { display: inline }
+.hint { color: var(--dim); font-size: 14px; margin: 0 }
+footer { color: var(--dim); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 12px }
+footer a { color: var(--bone) }
+@media print {
+  .bar, header p, #status, .hint, footer, .alt { display: none !important }
+  html, body { background: #fff; color: #000 } h1, h2 { color: #000 }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Cave Crossword</h1>
+    <p>Generate a dungeon whose rooms are a crossword. Name the adventure words you want hidden in the map, roll a seed, and edit the clues before you print.</p>
+  </header>
+
+  <div class="bar">
+    <div class="field"><label for="title">Map title</label><input id="title" value="The Sunken Stair"></div>
+    <div class="field"><label for="theme">Adventure words</label><input id="theme" value="dragon, torch, key, gold, trap, altar, ghost, rope"></div>
+    <div class="field"><label for="size">Size</label>
+      <select id="size"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select></div>
+    <div class="field"><label for="seed">Seed</label><input id="seed" type="number" min="1" value="11"></div>
+    <button id="gen" class="go" type="button">Generate</button>
+    <button id="dice" type="button">Random seed</button>
+    <label class="check"><input type="checkbox" id="answers"> Show answers</label>
+    <button id="dlsvg" class="local" type="button">Save map (SVG)</button>
+    <button id="dlhtml" class="local" type="button">Save puzzle sheet</button>
+    <button id="print" class="local" type="button">Print</button>
+  </div>
+  <p id="status" role="status">Loading…</p>
+
+  <div id="out" hidden>
+    <div id="map"></div>
+    <p class="hint">Squares marked ▲ hold your adventure words. Click any clue to rewrite it, or ↻ to try another dictionary sense.</p>
+    <div class="cols">
+      <section><h2>Across</h2><ol id="across"></ol></section>
+      <section><h2>Down</h2><ol id="down"></ol></section>
+    </div>
+  </div>
+
+  <footer>Runs entirely in your browser; nothing is sent anywhere. Words from SCOWL and ENABLE, clues from Princeton WordNet 3.0 (see licences in the source repository). Same seed, same cave.</footer>
+</div>
+<script id="data" type="text/plain">/*DATA*/</script>
+<script id="engine">/*ENGINE*/</script>
+<script>/*APP*/</script>
+<script>document.getElementById('answers').addEventListener('change', e => document.body.classList.toggle('key', e.target.checked));</script>
+</body>
+</html>

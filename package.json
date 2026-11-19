@@ -1,0 +1,13 @@
+{
+  "name": "cave-crossword",
+  "version": "0.1.0",
+  "description": "Generate printable dungeon maps whose rooms are a filled crossword. Offline, no dependencies.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build_standalone.mjs",
+    "generate": "node tools/cavexword.mjs",
+    "data": "sh tools/fetch_data.sh && node tools/build_lexicon.mjs && node tools/build_clues.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

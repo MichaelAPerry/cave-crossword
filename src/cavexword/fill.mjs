@@ -61,33 +61,32 @@ export function fill(L, index, { rng, seedWords = [], nodeLimit = 6000, restarts
       const s = rng.pick(opts); assigned[s.id] = w; used.add(w); s.cells.forEach((c, p) => letters[c] = w.charCodeAt(p) - 97);
     }
     let nodes = 0;
+    // incremental domain sizes: only slots crossing a changed slot need recounting
+    const cnt = new Int32Array(slots.length);
+    const recount = (t) => { const m = index.match(t.len, pat(t)); return (cnt[t.id] = m ? count(m) : 0); };
+    for (const s of slots) if (!assigned[s.id]) recount(s);
     const set = (s, w) => { const prev = s.cells.map(c => letters[c]); s.cells.forEach((c, p) => letters[c] = w.charCodeAt(p) - 97); return prev; };
     const unset = (s, prev) => s.cells.forEach((c, p) => letters[c] = prev[p]);
     const solve = () => {
       if (++nodes > nodeLimit) return false;
-      let best = null, bestN = Infinity, bestM = null;
-      for (const s of slots) {
-        if (assigned[s.id]) continue;
-        const m = index.match(s.len, pat(s));
-        const n = m ? count(m) : 0;
-        if (n < bestN) { best = s; bestN = n; bestM = m; if (n === 0) break; }
-      }
+      let best = null, bestN = Infinity;
+      for (const s of slots) if (!assigned[s.id] && cnt[s.id] < bestN) { best = s; bestN = cnt[s.id]; if (!bestN) break; }
       if (!best) return true;
       if (bestN === 0) { fail[best.id]++; return false; }
+      const bestM = index.match(best.len, pat(best));
       const b = index.byLen.get(best.len), cand = [];
       for (let k = 0; k < bestM.length; k++) { let x = bestM[k]; while (x) { const t = x & -x; const i = (k << 5) + (31 - Math.clz32(t)); cand.push(i); x ^= t; } }
       const scored = cand.map(i => [i, b.score[i] + rng.next() * 40]).sort((p, q) => p[1] - q[1]).slice(0, beam);
+      const nbrs = [...new Set(best.cross.flatMap(cr => cr.map(([t]) => t)))].filter(t => !assigned[t.id]);
       for (const [i] of scored) {
         const w = b.words[i]; if (used.has(w)) continue;
         const prev = set(best, w);
+        const saved = nbrs.map(t => cnt[t.id]);
         let ok = true;
-        for (const cr of best.cross) for (const [t] of cr) {
-          if (assigned[t.id]) continue;
-          const m = index.match(t.len, pat(t)); if (!m || !count(m)) { ok = false; fail[t.id]++; break; }
-          if (!ok) break;
-        }
+        for (const t of nbrs) if (!recount(t)) { ok = false; fail[t.id]++; break; }
         if (ok) { assigned[best.id] = w; used.add(w); if (solve()) return true; assigned[best.id] = null; used.delete(w); }
         unset(best, prev);
+        nbrs.forEach((t, k) => cnt[t.id] = saved[k]);
         if (nodes > nodeLimit) return false;
       }
       return false;
