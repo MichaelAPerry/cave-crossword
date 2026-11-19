@@ -9,6 +9,7 @@ import { caveLayout } from '../src/cavexword/layout.mjs';
 import { WordIndex, fillWithRock } from '../src/cavexword/fill.mjs';
 import { numberSlots, renderSVG } from '../src/cavexword/render.mjs';
 import { BLOCK } from '../src/cavexword/blocklist.mjs';
+import { buildVocab } from '../src/cavexword/vocab.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
 const seed = +arg('seed', 1), w = +arg('w', 34), h = +arg('h', 22), maxTier = +arg('tier', 50);
@@ -16,7 +17,8 @@ const theme = arg('theme', '').split(',').map(s => s.trim().toLowerCase()).filte
 const title = arg('title', ''), outBase = arg('out', `out/cave-${seed}`);
 const t0 = performance.now();
 const [lex, clues] = await Promise.all([loadLexicon({ maxTier: 100, minLen: 3 }), loadClueBook()]);
-const index = new WordIndex(lex, { maxTier, filter: (w) => clues.has(w) && !BLOCK.has(w) });
+const vocab = buildVocab(lex, clues, { maxTier });
+const index = new WordIndex(vocab, { maxTier: 60 });
 for (const t of theme) if (!clues.has(t)) console.warn(`theme word "${t}" has no clue; you'll need to write one`);
 
 let res = null, L = null;

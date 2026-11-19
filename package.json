@@ -7,7 +7,7 @@
   "scripts": {
     "build": "node tools/build_standalone.mjs",
     "generate": "node tools/cavexword.mjs",
-    "data": "sh tools/fetch_data.sh && node tools/build_lexicon.mjs && node tools/build_clues.mjs"
+    "data": "sh tools/fetch_data.sh && node tools/build_lexicon.mjs && node tools/build_clues.mjs && node tools/build_xd_clues.mjs"
   },
   "engines": { "node": ">=20" }
 }

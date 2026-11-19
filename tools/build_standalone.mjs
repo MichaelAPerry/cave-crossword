@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import { loadLexicon } from '../src/lexicon.mjs';
 import { loadClueBook } from '../src/clues.mjs';
-import { BLOCK } from '../src/cavexword/blocklist.mjs';
+import { buildVocab } from '../src/cavexword/vocab.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (p) => fs.readFileSync(new URL(p, root), 'utf8');
@@ -13,10 +13,10 @@ const engine = ['src/rng.mjs', 'src/cavexword/blocklist.mjs', 'src/cavexword/lay
 
 const [lex, clues] = await Promise.all([loadLexicon({ maxTier: 50, minLen: 3 }), loadClueBook()]);
 const rows = [];
-for (const w of lex.words) {
-  if (BLOCK.has(w) || !clues.has(w)) continue;
-  const cs = [0, 1, 2, 3].map(k => clues.get(w, k)).filter(Boolean).map(c => c.replace(/[\t\n<]/g, ' '));
-  rows.push([w, lex.tier.get(w), ...cs].join('\t'));
+const vocab = buildVocab(lex, clues);
+for (const w of vocab.words) {
+  const cs = [0, 1, 2].map(k => clues.get(w, k)).filter(Boolean).map(c => c.replace(/[\t\n<]/g, ' '));
+  rows.push([w, vocab.tier.get(w), ...cs].join('\t'));
 }
 const data = rows.join('\n');
 if (/<\/script/i.test(data + engine)) throw new Error('payload contains </script');

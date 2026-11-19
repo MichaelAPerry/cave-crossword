@@ -1,0 +1,225 @@
+achieved	tense gimmick	Managed to win the competition yesterday
+acting	tense gimmick	Playing a character on stage today
+acts	leaks answer	He performs an action now
+added	tense gimmick	Made a contribution yesterday
+adds	leaks answer	Makes an addition to today
+afternoon	leaks answer	The period of daylight after noon ends.
+aimed	tense gimmick	He shot at the target yesterday.
+allows	missing	
+almost	missing	
+alone	missing	
+along	missing	
+already	missing	
+also	missing	
+alter	missing	
+altered	missing	
+altering	missing	
+alternate	missing	
+alternative	missing	
+alternatives	missing	
+alters	missing	
+altogether	missing	
+always	missing	
+ambiguous	missing	
+amount	missing	
+amounts	missing	
+amuse	missing	
+amused	missing	
+ancient	tense gimmick	From very long ago.
+apology	missing	
+apparently	missing	
+appearing	tense gimmick	Showing up in court today
+appears	missing	
+applications	missing	
+applying	missing	
+arguments	not plural	His evidence showed the theory is flawed.
+associating	missing	
+back	missing	
+backed	missing	
+background	missing	
+backs	not plural	The side that is not normally seen
+began	tense gimmick	Started some time ago
+benefits	not plural	They receive help when needed.
+binds	leaks answer	She binds tightly when she can.
+bites	leaks answer	Mosquito bites cause sharp pain.
+bits	leaks answer	Tiny pieces make up the whole bits.
+bitten	leaks answer	The dog was bitten by a squirrel.
+branches	leaks answer	Every city has a branch.
+breaks	leaks answer	He takes frequent breaks.
+bright	tense gimmick	Shines like the sun today.
+brings	leaks answer	Rain brings cool weather.
+closed	tense gimmick	The gate is shut tight today
+collapse	tense gimmick	The building fell down yesterday
+collects	leaks answer	He gathers items for his collection.
+combination	leaks answer	His opening gambit was a clever chess combination.
+combinations	missing	
+combine	missing	
+combines	leaks answer	This recipe combines flour, sugar, and eggs.
+come	leaks answer	Please come visit us when you can.
+comes	leaks answer	Success often comes to those who work hard.
+coming	leaks answer	Winter is coming soon to this region.
+command	leaks answer	The general issued a strict command to retreat.
+commands	leaks answer	These orders are direct commands from headquarters.
+comment	leaks answer	She added a sharp comment during the debate.
+commented	leaks answer	He quickly commented on the news report.
+commenting	leaks answer	While commenting on the game, he missed a foul.
+comments	leaks answer	Readers left many comments on that article.
+commission	missing	
+confusion	too long	A state of mental disorder resulting from a failure to behave predictably
+connecting	too long	To be or become joined or united or linked, currently doing so
+consequence	too long	A phenomenon that follows and is caused by some previous event
+consequences	too long	Multiple phenomena that follow and are caused by prior events
+considerable	too long	Large or relatively large in number, amount, extent, or degree
+considering	tense gimmick	Deeming to be while currently doing so
+contributions	missing	
+control	missing	
+controlled	missing	
+conventions	missing	
+crashed	tense gimmick	Fall down violently yesterday
+crashes	not plural	Loud repeating resonant noise (plural)
+cums	missing	
+danger	too many words	A situation where you might get hurt or lose your life
+dated	too many words	Looking as if it belongs in an older time period
+degrees	too many words	Points on a scale measuring how hot or cold it gets.
+deletes	leaks answer	He deletes every word he writes in the draft.
+deleting	leaks answer	She is deleting old photos to free up space.
+deliberately	too many words	He knocked over the vase not by accident, but on purpose.
+deliver	too many words	The truck will drop off your package at the door.
+delivered	tense gimmick	They brought a baby safely into the world yesterday.
+delivering	leaks answer	The speaker is delivering a powerful speech now.
+delivers	leaks answer	This mail carrier delivers letters to our house daily.
+demand	leaks answer	She demanded that you apologize immediately for the mistake.
+demands	format	His job requires him to answer tough questions constantly.
+demonstrate	too many words	The group will demonstrate how to fix the leaky faucet.
+demonstration	too many words	We attended a public display showing how to tie a knot.
+department	too long	The section of the store that sells only computers and phones.
+depend	too many words	Success in this game depends on how well you focus.
+devoted	too many words	He is a friend who is truly ____ to helping others.
+die	too many words	Rolling a six means you can go back to the start!
+dies	leaks answer	This game involves rolling dice until you roll five!
+difficult	tense gimmick	This math problem seems really ____ today.
+difficulties	not plural	He overcame many personal ____ to succeed.
+disappeared	tense gimmick	Got lost long ago without explanation
+display	missing	
+displayed	missing	
+dollar	tense gimmick	US currency found in your wallet today
+early	tense gimmick	From long ago
+exists	tense gimmick	Is currently a real thing
+explained	tense gimmick	Made the confusing details clear yesterday
+extend	missing	
+fed	leaks answer	Given food during the last meal served
+feet	not plural	Use these to touch the cold floor.
+few	tense gimmick	Not many people showed up today.
+fight	tense gimmick	Two warriors clash in battle today.
+fill	missing	
+fingers	not plural	Count all of these on one hand
+firm	tense gimmick	Join the company today
+firstly	missing	
+fishes	missing	
+fits	missing	
+fitting	missing	
+fixed	missing	
+fixes	missing	
+fixing	missing	
+flag	missing	
+flash	missing	
+flashed	missing	
+flashes	missing	
+flashing	missing	
+flew	tense gimmick	Soared through the sky yesterday
+fresh	tense gimmick	Just harvested from the field today
+girl	tense gimmick	A young female student today
+grand	tense gimmick	He planned an epic celebration yesterday.
+guaranteed	leaks answer	She guaranteed the repairs to her car last week.
+guaranteeing	leaks answer	By guaranteeing delivery, the company promises speed.
+guarantees	leaks answer	This warranty guarantees a full year of protection.
+guard	leaks answer	The security guard checked every visitor's ID.
+guess	leaks answer	I guess the answer is hidden somewhere nearby.
+guessed	leaks answer	He guessed correctly that the prize was a car.
+guesses	leaks answer	Her guesses about the plot were surprisingly accurate.
+guessing	too many words	After guessing for hours, he finally found the right word.
+guide	leaks answer	A tour guide explained the history of the museum.
+gun	leaks answer	The hunter cleaned his gun before heading out.
+guy	leaks answer	That guy next door always helps neighbors move furniture.
+habit	leaks answer	Drinking coffee every morning is my favorite habit.
+habits	leaks answer	Breaking bad habits takes time and patience.
+hack	too many words	A taxi hack dropped us off at the hotel entrance.
+had	leaks answer	She had never seen such a beautiful sunset before.
+hair	leaks answer	The wind blew her hair across her face.
+half	leaks answer	We ate half the pizza before the movie started.
+hall	too many words	Students rushed through the main hall to get to class.
+hand	too many words	Please hold my hand while we cross the busy street.
+handing	leaks answer	He was handing out flyers at the community event.
+handle	leaks answer	Manipulate an object with your hands
+hanged	tense gimmick	The villain was executed long ago
+happily	tense gimmick	She dances with pure joy today
+hes	leaks answer	The Hebrew letter resembling an E.
+historical	missing	
+hundreds	leaks answer	Groups of one hundred put side by side
+idea	tense gimmick	What pops into your mind today
+implying	leaks answer	She was implying that we should leave now.
+imposed	tense gimmick	New fees were set forth as obligatory yesterday.
+impossible	tense gimmick	It is totally unlikely that it will rain tomorrow.
+impression	too many words	She left a vague idea of confidence after her talk.
+improvement	too many words	Adding salt was a change for the better in the soup.
+improvements	too many words	These upgrades are a change for the better in our home.
+inch	too many words	A small unit of length equal to one-twelfth of a foot
+inevitably	leaks answer	Inevitably happens
+info	leaks answer	Short for info
+inputted	tense gimmick	Entered data into a program yesterday
+insisting	tense gimmick	Continually demanding action today
+installs	tense gimmick	Sets up equipment for operation today
+instruction	too many words	A set of directions on how to perform a task
+interests	leaks answer	Reading and art are her main interests.
+intervals	leaks answer	Take short breaks during your study intervals.
+introduces	leaks answer	This course introduces you to coding.
+invalid	too long	A person unable to care for themselves due to a long-term health issue
+inventing	tense gimmick	Currently making something up from nothing
+kid	tense gimmick	A young boy playing in the park today
+knows	format	She ___ the answer before the test
+ladies	not plural	Gentlefolk gather here
+lessons	missing	
+let	missing	
+likely	tense gimmick	Expected to happen soon today
+linear	missing	
+lived	leaks answer	Lived a certain type of life.
+lives	not plural	The state of being alive.
+logs	not plural	Stacked wood ready to feed a fire
+managing	tense gimmick	Handling a situation with care today
+media	not plural	The surrounding environment
+medium	too long	A means or instrumentality for storing or communicating information
+mediums	not plural	The surrounding environment (pl.)
+meetings	not plural	A formally arranged gathering (pl.)
+members	too many words	One of the persons who compose a social group (pl.)
+mentions	too many words	A remark that calls attention to something or someone (pl.)
+mess	too many words	A dirty and disorderly jumble of dishes left in the sink
+messages	tense gimmick	Send several short notes from your phone today
+messy	too many words	Look at a room that is full of clutter and dirt
+mile	too many words	Walk one long unit of distance to get to town
+miles	too many words	Drive many units of distance on a long road trip
+million	leaks answer	Count one million items in this huge collection
+millions	leaks answer	There are millions of stars visible in the sky
+minded	tense gimmick	I am mentally oriented toward helping others today
+mine	too long	Boom! That's what happens when you step on this contact explosive.
+minimal	too long	A truly tiny amount, representing the least possible quantity.
+minority	too long	Less than half the total group; a smaller faction within a crowd.
+minute	leaks answer	Watch your clock, as one minute equals sixty seconds.
+minutes	too many words	Read these notes to see exactly what happened at the meeting.
+mislead	too many words	Don't let this person guide you down the wrong path!
+miss	too many words	If you fail to catch or perceive something, you miss it.
+missed	too many words	The ball went right past him; he missed the catch entirely.
+misses	too long	She doesn't notice small details; she often misses important clues.
+missing	too long	Your keys are not where they belong; they are completely missing.
+mistake	too long	Calling a dog a cat is an example of identifying something incorrectly.
+mistaken	too long	He believes he is right, but his judgment on this matter is wrong.
+mistakes	too many words	It is easy to make errors when rushing through your homework.
+mistook	too many words	At first glance, he mistook the actor for a famous director.
+misunderstand	too long	We need to talk clearly so we don't interpret each other wrongly.
+misunderstood	too many words	She felt her true feelings were misunderstood by her friends.
+misuse	too long	Using a hammer to drive a screw is applying a tool to the wrong purpose.
+mixes	missing	
+models	missing	
+months	missing	
+named	missing	
+new	tense gimmick	Just arrived on the scene today
+notes	leaks answer	Notice or perceive (third person singular).

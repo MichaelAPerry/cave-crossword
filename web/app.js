@@ -26,7 +26,7 @@ function workerMain() {
     const m = e.data;
     if (m.type === 'data') { build(m.text); return; }
     if (m.type === 'gen') {
-      index ??= new WordIndex(lexWords, { maxTier: 50, filter: (w) => !BLOCK.has(w) });
+      index ??= new WordIndex(lexWords, { maxTier: 60, filter: (w) => !BLOCK.has(w) });
       self.postMessage({ type: 'done', ...generate(index, m, (msg) => self.postMessage({ type: 'progress', msg })) });
     }
   };
@@ -47,7 +47,7 @@ function generate(index, { seed, w, h, theme }, progress) {
 function runLocal(msg) {
   const words = [], tier = new Map();
   for (const line of DATA.split('\n')) { const p = line.split('\t'); if (p[0]) { words.push(p[0]); tier.set(p[0], +p[1]); } }
-  runLocal.index ??= new WordIndex({ words, tier }, { maxTier: 50, filter: (w) => !BLOCK.has(w) });
+  runLocal.index ??= new WordIndex({ words, tier }, { maxTier: 60, filter: (w) => !BLOCK.has(w) });
   return generate(runLocal.index, msg, (t) => { $('status').textContent = t; });
 }
 
@@ -108,7 +108,7 @@ function show() {
       const meta = document.createElement('span'); meta.className = 'len';
       meta.textContent = ` (${s.len})`;
       const alt = document.createElement('button'); alt.className = 'alt'; alt.type = 'button';
-      alt.title = 'Use another dictionary sense'; alt.textContent = '↻';
+      alt.title = 'Use another clue'; alt.textContent = '↻';
       alt.setAttribute('aria-label', `Another clue for ${dir ? 'down' : 'across'} ${s.num}`);
       alt.addEventListener('click', () => { state.alt ??= new Map(); state.alt.set(s.id, (state.alt.get(s.id) || 0) + 1); state.edits.delete(s.id); txt.textContent = clueFor(s) || 'Write a clue'; highlight(s); });
       const ans = document.createElement('span'); ans.className = 'ans'; ans.textContent = s.word.toUpperCase();

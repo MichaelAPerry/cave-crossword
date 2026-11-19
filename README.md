@@ -10,7 +10,7 @@
 - **Carves a cave** with a cellular automaton (the classic cave-smoothing rule), then reshapes it so every run of squares is a legal crossword entry.
 - **Fills it with real words.** A constraint solver places words; when a region can't be filled, it adds rock and tries again.
 - **Hides your adventure words** (DRAGON, KEY, ALTAR…) in the map and marks their squares ▲. The DM reveals what a room holds when its word is solved.
-- **Writes clues offline** from Princeton WordNet. Every clue is editable, and ↻ swaps in another dictionary sense.
+- **Uses real crossword clues.** It draws on the [xd corpus](https://xd.saul.pw): 11.6 million clues from published crosswords, filtered to clues that make sense outside their original puzzle. Princeton WordNet fills any gaps. Every clue is editable, and ↻ cycles through alternatives.
 - **Same seed, same cave.** Maps are fully reproducible.
 
 ## Use it
@@ -30,7 +30,8 @@ npm run data         # re-download word lists and WordNet, rebuild lexicon and c
 | Cave layout: cellular automaton, crossword legalisation, largest-component cleanup | `src/cavexword/layout.mjs` |
 | Filler: bitset word index, most-constrained-slot search with forward checking, incremental domain counts, adds rock on failure | `src/cavexword/fill.mjs` |
 | Ink-style SVG rendering: procedural rock hatching, clue numbering | `src/cavexword/render.mjs` |
-| Offline clues from WordNet | `tools/build_clues.mjs`, `src/clues.mjs` |
+| Clues: xd corpus filter, WordNet fallback, optional local-model clues | `tools/build_xd_clues.mjs`, `tools/build_clues.mjs`, `tools/local_clues.mjs`, `src/clues.mjs` |
+| Fill vocabulary: common words plus frequent crossword answers | `src/cavexword/vocab.mjs` |
 | Standalone page | `web/`, `tools/build_standalone.mjs` |
 
 Filling an open, irregular shape is the hard part: crossword fillability collapses past a tipping point as grids get more open, a phase transition studied by Anbulagan & Botea (CP 2008, SoCS 2009). The generator stays on the fillable side by adding rock where the search fails. See [`research/gap1_deep_lit.md`](research/gap1_deep_lit.md).
@@ -48,6 +49,6 @@ Code: [MIT](LICENSE).
 
 ## Data licences
 - Word lists: SCOWL (permissive) and ENABLE (public domain).
-- Clues: Princeton WordNet 3.0.
+- Clues: the [xd corpus](https://xd.saul.pw) by Saul Pwanson. The clues were written by the constructors and editors of the original puzzles, and xd has no data licence, so `npm run data` downloads it rather than the repo storing it. Fallback clues come from Princeton WordNet 3.0.
 
 Notices are in [`data/LICENSES.md`](data/LICENSES.md).
