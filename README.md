@@ -4,7 +4,7 @@
 
 ![A generated cave crossword: hatched rock walls around numbered crossword squares, with adventure words marked](docs/cave-crossword.png)
 
-**[Download `dist/cave-crossword.html`](dist/cave-crossword.html)** and open it in any browser. It's a single 4 MB file that works offline and sends nothing anywhere.
+**[Try it in your browser](https://michaelaperry.github.io/cave-crossword/)**, or download [`dist/cave-crossword.html`](dist/cave-crossword.html). It's a single 4 MB file that works offline and sends nothing anywhere.
 
 ## What it does
 - **Carves a cave** with a cellular automaton (the classic cave-smoothing rule), then reshapes it so every run of squares is a legal crossword entry.
@@ -42,6 +42,9 @@ Filling an open, irregular shape is the hard part: crossword fillability collaps
 
 ## Background research
 This project began as **WordLife**, an experiment in whether spelling rules can drive an artificial-life ecosystem. Short answer: they can't. Real English behaves like matched fake lexicons in every model tested. The models, experiments and write-up are kept in [`research/RESEARCH.md`](research/RESEARCH.md), `src/models/`, `experiments/` and `sandbox/`.
+
+## Licence
+Code: [MIT](LICENSE).
 
 ## Data licences
 - Word lists: SCOWL (permissive) and ENABLE (public domain).
