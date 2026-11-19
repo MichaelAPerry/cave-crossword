@@ -1,0 +1,42 @@
+### A minLen2
+model=crystal gens=300 burn=150 seeds=6 minLen=2 set={}
+cond                    density        words      species      shannon  meanWordLen    crossings   neutralMut     turnover
+real                0.622±0.004       855±18        326±4  5.243±0.031  2.680±0.023       924±30  0.115±0.073  0.004±0.001   2.9ms/gen
+markov2             0.641±0.005       855±17       388±16  5.466±0.079  2.826±0.054       997±22  0.083±0.065  0.004±0.000   3.6ms/gen
+shuffle             0.571±0.004       733±15        242±6  4.900±0.037  2.601±0.030       690±19  0.073±0.073  0.004±0.000   3.4ms/gen
+uniform             0.624±0.004       862±12        345±7  5.358±0.030  2.703±0.017       950±21  0.073±0.047  0.004±0.000   3.7ms/gen
+### A minLen3
+model=crystal gens=300 burn=150 seeds=6 minLen=3 set={}
+cond                    density        words      species      shannon  meanWordLen    crossings   neutralMut     turnover
+real                0.080±0.009     13.4±5.7     13.0±5.1  2.389±0.412  4.032±0.167  3.104±2.419  0.104±0.076  0.003±0.001   1.0ms/gen
+markov2             0.090±0.008     21.4±5.7     21.1±5.4  2.977±0.230  4.161±0.121  7.198±3.070  0.083±0.065  0.003±0.001   1.0ms/gen
+shuffle             0.082±0.004     16.5±3.6     16.2±3.4  2.712±0.233  3.611±0.096  3.646±2.097  0.052±0.047  0.003±0.000   0.9ms/gen
+uniform             0.085±0.010     20.0±6.7     19.7±6.5  2.864±0.357  3.629±0.194  5.177±2.774  0.052±0.047  0.003±0.001   0.9ms/gen
+### A minLen2 viable mu=0.05 no decay
+model=crystal gens=300 burn=150 seeds=6 minLen=2 set={"pDecay":0,"mu":0.05,"mutation":"viable"}
+cond                    density        words      species      shannon  meanWordLen    crossings   neutralMut     turnover
+real                0.694±0.002       931±14       503±13  5.845±0.055  3.112±0.049      1300±22     28.7±2.5  0.000±0.000   3.8ms/gen
+markov2             0.704±0.003        900±9        552±6  5.993±0.020  3.277±0.026      1329±19     22.6±0.8  0.000±0.000   3.8ms/gen
+shuffle             0.624±0.007       837±17       350±11  5.389±0.059  2.915±0.024      1006±17     15.6±1.3  0.000±0.000   4.5ms/gen
+uniform             0.682±0.004        929±6       484±16  5.832±0.049  3.069±0.024      1282±19     19.6±2.4  0.000±0.000   4.3ms/gen
+### B budget1
+model=crystal gens=400 burn=200 seeds=6 minLen=2 set={"resources":true,"budget":1,"pDecay":0.003}
+cond                    density        words      species      shannon  meanWordLen      vowelCV
+real                0.082±0.002     54.5±4.7  3.000±0.462  0.527±0.076  2.175±0.029  0.043±0.004   1.4ms/gen
+markov2             0.117±0.002        163±3  7.573±0.778  1.451±0.055  2.229±0.030  0.032±0.002   1.4ms/gen
+shuffle             0.081±0.002     60.4±4.1  1.797±0.171  0.099±0.081  2.023±0.025  0.043±0.003   1.2ms/gen
+uniform             0.107±0.001        159±5     10.2±1.5  1.634±0.078  2.197±0.036  0.031±0.003   1.4ms/gen
+### B budget3
+model=crystal gens=400 burn=200 seeds=6 minLen=2 set={"resources":true,"budget":3,"pDecay":0.003}
+cond                    density        words      species      shannon  meanWordLen      vowelCV
+real                0.609±0.002        799±9        252±7  4.814±0.037  2.683±0.021  0.034±0.001   3.5ms/gen
+markov2             0.631±0.005        847±8       323±11  5.106±0.051  2.767±0.033  0.037±0.002   3.9ms/gen
+shuffle             0.557±0.005       707±16        165±5  4.292±0.041  2.528±0.013  0.034±0.001   3.9ms/gen
+uniform             0.633±0.004       882±14        320±5  5.233±0.031  2.717±0.024  0.047±0.003   4.4ms/gen
+### C bigram
+model=bigram gens=300 burn=150 seeds=4 minLen=2 set={}
+cond                    density        words      species  meanWordLen    wordYield
+real                0.932±0.001  5.750±0.552  5.571±0.421  2.408±0.158  0.017±0.002   0.2ms/gen
+markov2             0.934±0.003  5.214±1.000  4.964±1.090  2.369±0.103  0.015±0.003   0.2ms/gen
+shuffle             0.935±0.003  2.429±0.369  2.429±0.369  2.053±0.277  0.007±0.001   0.2ms/gen
+uniform             0.933±0.003  3.000±0.606  2.893±0.621  2.226±0.090  0.009±0.002   0.2ms/gen

@@ -1,0 +1,1255 @@
+{
+  "settings": {
+    "model": "organisms",
+    "tier": 50,
+    "minLen": 2,
+    "gens": 500,
+    "every": 1
+  },
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "noveltyWindow": 200,
+  "definitions": {
+    "endpoint": "All metrics are endpoint values except novelty and event totals.",
+    "noveltyRate": "First-ever spelling births divided by all births in generations 301–500.",
+    "lineageSurvival": "Living founder lineages divided by successfully planted founders.",
+    "degreeEnrichment": "Living mean distinct edit-1 degree divided by the lexicon mean weighted by living word lengths.",
+    "cladeConcentration": "Living fraction with at least four other organisms with the same four-letter suffix and a spelling different from their own.",
+    "distinctCladeConcentration": "Living fraction with at least four distinct other spellings with the same four-letter suffix.",
+    "missing": "Undefined ratios are null and omitted from mean and sample SD."
+  },
+  "conditions": [
+    {
+      "mutation": "exhaustive",
+      "lex": "real",
+      "lexiconSize": 61227,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 412.625,
+          "sd": 18.298614311315646,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 315.375,
+          "sd": 23.323424766897826,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 2990.125,
+          "sd": 256.97606197576346,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.042083179081672854,
+          "sd": 0.006436172129638435,
+          "n": 8
+        },
+        "distinctLineages": {
+          "mean": 6,
+          "sd": 1.0690449676496976,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.75,
+          "sd": 0.1336306209562122,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 1.2806285932895323,
+          "sd": 0.048115527133869754,
+          "n": 8
+        },
+        "meanOrganismWordLength": {
+          "mean": 3.9569761221652584,
+          "sd": 0.19489238765624797,
+          "n": 8
+        },
+        "cladeConcentration": {
+          "mean": 0.05531217374644075,
+          "sd": 0.049670497009646986,
+          "n": 8
+        },
+        "distinctCladeConcentration": {
+          "mean": 0.03685912454525101,
+          "sd": 0.04862003094578888,
+          "n": 8
+        }
+      },
+      "extinctionCount": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 388,
+          "distinctWords": 296,
+          "everWords": 3043,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.2648938626265638,
+          "meanOrganismWordLength": 4.283505154639175,
+          "cladeConcentration": 0.0979381443298969,
+          "distinctCladeConcentration": 0.05154639175257732,
+          "noveltyRate": 0.04558680892337536,
+          "lateBirths": 16496,
+          "lateNovelBirths": 752,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 390,
+          "distinctWords": 283,
+          "everWords": 2420,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.3695158079551397,
+          "meanOrganismWordLength": 4.176923076923077,
+          "cladeConcentration": 0.15384615384615385,
+          "distinctCladeConcentration": 0.14615384615384616,
+          "noveltyRate": 0.0328757642173261,
+          "lateBirths": 17338,
+          "lateNovelBirths": 570,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 403,
+          "distinctWords": 304,
+          "everWords": 2974,
+          "distinctLineages": 8,
+          "lineageSurvival": 1,
+          "degreeEnrichment": 1.2690078576277122,
+          "meanOrganismWordLength": 3.990074441687345,
+          "cladeConcentration": 0.06947890818858561,
+          "distinctCladeConcentration": 0.052109181141439205,
+          "noveltyRate": 0.038646055437100216,
+          "lateBirths": 18760,
+          "lateNovelBirths": 725,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 438,
+          "distinctWords": 322,
+          "everWords": 2864,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.2831353896588669,
+          "meanOrganismWordLength": 3.824200913242009,
+          "cladeConcentration": 0.00684931506849315,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.036388875117743295,
+          "lateBirths": 20171,
+          "lateNovelBirths": 734,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 412,
+          "distinctWords": 342,
+          "everWords": 3232,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.3324416979881737,
+          "meanOrganismWordLength": 4,
+          "cladeConcentration": 0.043689320388349516,
+          "distinctCladeConcentration": 0.01699029126213592,
+          "noveltyRate": 0.052063601400608464,
+          "lateBirths": 17421,
+          "lateNovelBirths": 907,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 432,
+          "distinctWords": 349,
+          "everWords": 3160,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.226218441043075,
+          "meanOrganismWordLength": 3.8310185185185186,
+          "cladeConcentration": 0.027777777777777776,
+          "distinctCladeConcentration": 0.013888888888888888,
+          "noveltyRate": 0.04273371617776398,
+          "lateBirths": 19329,
+          "lateNovelBirths": 826,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 415,
+          "distinctWords": 300,
+          "everWords": 3104,
+          "distinctLineages": 7,
+          "lineageSurvival": 0.875,
+          "degreeEnrichment": 1.2637514746769805,
+          "meanOrganismWordLength": 3.710843373493976,
+          "cladeConcentration": 0.01927710843373494,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.039723834300580345,
+          "lateBirths": 19988,
+          "lateNovelBirths": 794,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 423,
+          "distinctWords": 327,
+          "everWords": 3124,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.2360642147397447,
+          "meanOrganismWordLength": 3.839243498817967,
+          "cladeConcentration": 0.02364066193853428,
+          "distinctCladeConcentration": 0.014184397163120567,
+          "noveltyRate": 0.04864677707888511,
+          "lateBirths": 17329,
+          "lateNovelBirths": 843,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    },
+    {
+      "mutation": "exhaustive",
+      "lex": "markov2",
+      "lexiconSize": 61226,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 432.625,
+          "sd": 22.677474664143208,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 312.625,
+          "sd": 17.467827569563422,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 2612.75,
+          "sd": 169.32787299032776,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.0384415818493754,
+          "sd": 0.004499157260647553,
+          "n": 8
+        },
+        "distinctLineages": {
+          "mean": 6.875,
+          "sd": 0.8345229603962802,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.859375,
+          "sd": 0.10431537004953502,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 1.3435742207858026,
+          "sd": 0.057107692216144805,
+          "n": 8
+        },
+        "meanOrganismWordLength": {
+          "mean": 3.7957051114661717,
+          "sd": 0.0895346531285557,
+          "n": 8
+        },
+        "cladeConcentration": {
+          "mean": 0.029729848522351145,
+          "sd": 0.03186170054855091,
+          "n": 8
+        },
+        "distinctCladeConcentration": {
+          "mean": 0.0025802752293577983,
+          "sd": 0.007298120448026295,
+          "n": 8
+        }
+      },
+      "extinctionCount": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 448,
+          "distinctWords": 314,
+          "everWords": 2391,
+          "distinctLineages": 7,
+          "lineageSurvival": 0.875,
+          "degreeEnrichment": 1.3303667648829476,
+          "meanOrganismWordLength": 3.78125,
+          "cladeConcentration": 0.011160714285714286,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03999764025721196,
+          "lateBirths": 16951,
+          "lateNovelBirths": 678,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 455,
+          "distinctWords": 329,
+          "everWords": 2869,
+          "distinctLineages": 8,
+          "lineageSurvival": 1,
+          "degreeEnrichment": 1.3487196992280719,
+          "meanOrganismWordLength": 3.7032967032967035,
+          "cladeConcentration": 0.006593406593406593,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03337141769018376,
+          "lateBirths": 21006,
+          "lateNovelBirths": 701,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 410,
+          "distinctWords": 284,
+          "everWords": 2461,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.3376641388448975,
+          "meanOrganismWordLength": 3.846341463414634,
+          "cladeConcentration": 0.07560975609756097,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.042848454691214684,
+          "lateBirths": 18087,
+          "lateNovelBirths": 775,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 436,
+          "distinctWords": 324,
+          "everWords": 2604,
+          "distinctLineages": 7,
+          "lineageSurvival": 0.875,
+          "degreeEnrichment": 1.3913198824371367,
+          "meanOrganismWordLength": 3.834862385321101,
+          "cladeConcentration": 0.08027522935779817,
+          "distinctCladeConcentration": 0.020642201834862386,
+          "noveltyRate": 0.04551059956544718,
+          "lateBirths": 17029,
+          "lateNovelBirths": 775,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 393,
+          "distinctWords": 295,
+          "everWords": 2598,
+          "distinctLineages": 7,
+          "lineageSurvival": 0.875,
+          "degreeEnrichment": 1.3037809024424298,
+          "meanOrganismWordLength": 3.83206106870229,
+          "cladeConcentration": 0.002544529262086514,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03488782455255861,
+          "lateBirths": 19835,
+          "lateNovelBirths": 692,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 454,
+          "distinctWords": 314,
+          "everWords": 2520,
+          "distinctLineages": 8,
+          "lineageSurvival": 1,
+          "degreeEnrichment": 1.266697046626756,
+          "meanOrganismWordLength": 3.6872246696035242,
+          "cladeConcentration": 0.004405286343612335,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.0332620693084075,
+          "lateBirths": 20113,
+          "lateNovelBirths": 669,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 445,
+          "distinctWords": 336,
+          "everWords": 2845,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.4535207467561864,
+          "meanOrganismWordLength": 3.7258426966292135,
+          "cladeConcentration": 0.038202247191011236,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.037340153452685425,
+          "lateBirths": 19550,
+          "lateNovelBirths": 730,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 420,
+          "distinctWords": 305,
+          "everWords": 2614,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.3165245850679927,
+          "meanOrganismWordLength": 3.954761904761905,
+          "cladeConcentration": 0.01904761904761905,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.040314495277294075,
+          "lateBirths": 18951,
+          "lateNovelBirths": 764,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    },
+    {
+      "mutation": "exhaustive",
+      "lex": "uniform",
+      "lexiconSize": 61218,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 434.125,
+          "sd": 40.22947568991813,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 221.625,
+          "sd": 96.6642754219838,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 1186,
+          "sd": 386.029976630239,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.021268762774923688,
+          "sd": 0.0062430036196320406,
+          "n": 8
+        },
+        "distinctLineages": {
+          "mean": 3.625,
+          "sd": 1.3024701806293193,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.453125,
+          "sd": 0.1628087725786649,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 2.3786653924104932,
+          "sd": 1.4957965182135182,
+          "n": 8
+        },
+        "meanOrganismWordLength": {
+          "mean": 3.797448486705486,
+          "sd": 0.5777038494976448,
+          "n": 8
+        },
+        "cladeConcentration": {
+          "mean": 0.06320259784075574,
+          "sd": 0.16277062805175557,
+          "n": 8
+        },
+        "distinctCladeConcentration": {
+          "mean": 0,
+          "sd": 0,
+          "n": 8
+        }
+      },
+      "extinctionCount": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 475,
+          "distinctWords": 287,
+          "everWords": 1487,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.8602922273304565,
+          "meanOrganismWordLength": 3.4442105263157896,
+          "cladeConcentration": 0.004210526315789474,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.017471628397994193,
+          "lateBirths": 18945,
+          "lateNovelBirths": 331,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 451,
+          "distinctWords": 289,
+          "everWords": 1517,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.741918482140106,
+          "meanOrganismWordLength": 3.456762749445676,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.016655914609113837,
+          "lateBirths": 17051,
+          "lateNovelBirths": 284,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 443,
+          "distinctWords": 263,
+          "everWords": 1250,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.7960982170727542,
+          "meanOrganismWordLength": 3.395033860045147,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.025750229327742104,
+          "lateBirths": 15262,
+          "lateNovelBirths": 393,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 351,
+          "distinctWords": 121,
+          "everWords": 885,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 2.080311847813747,
+          "meanOrganismWordLength": 4.319088319088319,
+          "cladeConcentration": 0.03418803418803419,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.026519738435456526,
+          "lateBirths": 8258,
+          "lateNovelBirths": 219,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 438,
+          "distinctWords": 244,
+          "everWords": 1405,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.8906744031516074,
+          "meanOrganismWordLength": 3.684931506849315,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.02325111200970481,
+          "lateBirths": 14838,
+          "lateNovelBirths": 345,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 465,
+          "distinctWords": 269,
+          "everWords": 1122,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.6921282778232174,
+          "meanOrganismWordLength": 3.488172043010753,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.029517916988914667,
+          "lateBirths": 15516,
+          "lateNovelBirths": 458,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 400,
+          "distinctWords": 24,
+          "everWords": 389,
+          "distinctLineages": 1,
+          "lineageSurvival": 0.125,
+          "degreeEnrichment": 6.069129583220394,
+          "meanOrganismWordLength": 5.0225,
+          "cladeConcentration": 0.465,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.010454545454545454,
+          "lateBirths": 6600,
+          "lateNovelBirths": 69,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 450,
+          "distinctWords": 276,
+          "everWords": 1433,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.8987701007316642,
+          "meanOrganismWordLength": 3.568888888888889,
+          "cladeConcentration": 0.0022222222222222222,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.020529016975917885,
+          "lateBirths": 17731,
+          "lateNovelBirths": 364,
+          "inviableBuds": 0,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    },
+    {
+      "mutation": "blind",
+      "lex": "real",
+      "lexiconSize": 61227,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 144,
+          "sd": 38.75933067386116,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 45.375,
+          "sd": 15.96368647005715,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 266.125,
+          "sd": 105.34492665253781,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.050051843942293985,
+          "sd": 0.022555585632613635,
+          "n": 8
+        },
+        "distinctLineages": {
+          "mean": 4.125,
+          "sd": 1.246423454758225,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.515625,
+          "sd": 0.15580293184477811,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 1.3026376814367455,
+          "sd": 0.1403566941324205,
+          "n": 8
+        },
+        "meanOrganismWordLength": {
+          "mean": 4.258038766941017,
+          "sd": 0.5753054752506704,
+          "n": 8
+        },
+        "cladeConcentration": {
+          "mean": 0.23315588798824527,
+          "sd": 0.2684018013953698,
+          "n": 8
+        },
+        "distinctCladeConcentration": {
+          "mean": 0.05301113921803577,
+          "sd": 0.10308161538498192,
+          "n": 8
+        }
+      },
+      "extinctionCount": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 182,
+          "distinctWords": 67,
+          "everWords": 361,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.4791735340794516,
+          "meanOrganismWordLength": 4.126373626373627,
+          "cladeConcentration": 0.01098901098901099,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.04649827784156142,
+          "lateBirths": 3484,
+          "lateNovelBirths": 162,
+          "inviableBuds": 24680,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 95,
+          "distinctWords": 15,
+          "everWords": 80,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.5034701098696093,
+          "meanOrganismWordLength": 5.08421052631579,
+          "cladeConcentration": 0.5578947368421052,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03503184713375796,
+          "lateBirths": 942,
+          "lateNovelBirths": 33,
+          "inviableBuds": 8918,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 203,
+          "distinctWords": 52,
+          "everWords": 274,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.0680570886981915,
+          "meanOrganismWordLength": 4.167487684729064,
+          "cladeConcentration": 0.37438423645320196,
+          "distinctCladeConcentration": 0.270935960591133,
+          "noveltyRate": 0.023929805902685456,
+          "lateBirths": 3761,
+          "lateNovelBirths": 90,
+          "inviableBuds": 24041,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 134,
+          "distinctWords": 47,
+          "everWords": 266,
+          "distinctLineages": 2,
+          "lineageSurvival": 0.25,
+          "degreeEnrichment": 1.3340623197920596,
+          "meanOrganismWordLength": 3.6865671641791047,
+          "cladeConcentration": 0.05970149253731343,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.04767879548306148,
+          "lateBirths": 2391,
+          "lateNovelBirths": 114,
+          "inviableBuds": 17533,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 178,
+          "distinctWords": 33,
+          "everWords": 162,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.2947332534424583,
+          "meanOrganismWordLength": 5.174157303370786,
+          "cladeConcentration": 0.6741573033707865,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.024034672970843184,
+          "lateBirths": 2538,
+          "lateNovelBirths": 61,
+          "inviableBuds": 26634,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 111,
+          "distinctWords": 47,
+          "everWords": 253,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.2361336541271069,
+          "meanOrganismWordLength": 4.2342342342342345,
+          "cladeConcentration": 0.17117117117117117,
+          "distinctCladeConcentration": 0.15315315315315314,
+          "noveltyRate": 0.08376288659793814,
+          "lateBirths": 1552,
+          "lateNovelBirths": 130,
+          "inviableBuds": 10651,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 118,
+          "distinctWords": 43,
+          "everWords": 329,
+          "distinctLineages": 6,
+          "lineageSurvival": 0.75,
+          "degreeEnrichment": 1.274185747470238,
+          "meanOrganismWordLength": 3.8813559322033897,
+          "cladeConcentration": 0.01694915254237288,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.07456347333647947,
+          "lateBirths": 2119,
+          "lateNovelBirths": 158,
+          "inviableBuds": 16335,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 131,
+          "distinctWords": 59,
+          "everWords": 404,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.2312857440148497,
+          "meanOrganismWordLength": 3.7099236641221376,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.06491499227202473,
+          "lateBirths": 2588,
+          "lateNovelBirths": 168,
+          "inviableBuds": 19437,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    },
+    {
+      "mutation": "blind",
+      "lex": "markov2",
+      "lexiconSize": 61226,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 133.125,
+          "sd": 61.631247872209386,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 40,
+          "sd": 23.34217519549416,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 229,
+          "sd": 106.19792841670689,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.036311997227487396,
+          "sd": 0.022177403619016628,
+          "n": 8
+        },
+        "distinctLineages": {
+          "mean": 3.25,
+          "sd": 1.2817398889233114,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.40625,
+          "sd": 0.16021748611541392,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 1.0686067411389621,
+          "sd": 0.22726728641569363,
+          "n": 8
+        },
+        "meanOrganismWordLength": {
+          "mean": 3.9032748748649295,
+          "sd": 0.6628518467224815,
+          "n": 8
+        },
+        "cladeConcentration": {
+          "mean": 0.07393901781142564,
+          "sd": 0.15138480562732956,
+          "n": 8
+        },
+        "distinctCladeConcentration": {
+          "mean": 0,
+          "sd": 0,
+          "n": 8
+        }
+      },
+      "extinctionCount": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 196,
+          "distinctWords": 76,
+          "everWords": 358,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.3002115458932033,
+          "meanOrganismWordLength": 3.8418367346938775,
+          "cladeConcentration": 0.030612244897959183,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03635432667690732,
+          "lateBirths": 3906,
+          "lateNovelBirths": 142,
+          "inviableBuds": 28691,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 84,
+          "distinctWords": 36,
+          "everWords": 244,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.121778255569162,
+          "meanOrganismWordLength": 3.5714285714285716,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.07531692766592095,
+          "lateBirths": 1341,
+          "lateNovelBirths": 101,
+          "inviableBuds": 10761,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 205,
+          "distinctWords": 21,
+          "everWords": 148,
+          "distinctLineages": 2,
+          "lineageSurvival": 0.25,
+          "degreeEnrichment": 0.6080620642237692,
+          "meanOrganismWordLength": 3.497560975609756,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.012279888785912883,
+          "lateBirths": 4316,
+          "lateNovelBirths": 53,
+          "inviableBuds": 28682,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 93,
+          "distinctWords": 19,
+          "everWords": 173,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 0.894858299574911,
+          "meanOrganismWordLength": 4.258064516129032,
+          "cladeConcentration": 0.10752688172043011,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03239145416953825,
+          "lateBirths": 1451,
+          "lateNovelBirths": 47,
+          "inviableBuds": 14393,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 189,
+          "distinctWords": 59,
+          "everWords": 379,
+          "distinctLineages": 4,
+          "lineageSurvival": 0.5,
+          "degreeEnrichment": 1.2238743102592107,
+          "meanOrganismWordLength": 3.708994708994709,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.035624052551793836,
+          "lateBirths": 3958,
+          "lateNovelBirths": 141,
+          "inviableBuds": 24195,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 140,
+          "distinctWords": 53,
+          "everWords": 260,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.0935656189848784,
+          "meanOrganismWordLength": 3.45,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.04858125537403268,
+          "lateBirths": 2326,
+          "lateNovelBirths": 113,
+          "inviableBuds": 16440,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 126,
+          "distinctWords": 49,
+          "everWords": 210,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.0443151349229778,
+          "meanOrganismWordLength": 3.492063492063492,
+          "cladeConcentration": 0.015873015873015872,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.04642694583522986,
+          "lateBirths": 2197,
+          "lateNovelBirths": 102,
+          "inviableBuds": 16621,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 32,
+          "distinctWords": 7,
+          "everWords": 60,
+          "distinctLineages": 1,
+          "lineageSurvival": 0.125,
+          "degreeEnrichment": 1.2621886996835858,
+          "meanOrganismWordLength": 5.40625,
+          "cladeConcentration": 0.4375,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.0035211267605633804,
+          "lateBirths": 568,
+          "lateNovelBirths": 2,
+          "inviableBuds": 5054,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    },
+    {
+      "mutation": "blind",
+      "lex": "uniform",
+      "lexiconSize": 61218,
+      "summary": {
+        "livingOrganisms": {
+          "mean": 112.25,
+          "sd": 77.50714252800927,
+          "n": 8
+        },
+        "distinctWords": {
+          "mean": 16.25,
+          "sd": 15.332039282868688,
+          "n": 8
+        },
+        "everWords": {
+          "mean": 60.125,
+          "sd": 52.92970405574333,
+          "n": 8
+        },
+        "noveltyRate": {
+          "mean": 0.024046905254792948,
+          "sd": 0.024059872000199926,
+          "n": 7
+        },
+        "distinctLineages": {
+          "mean": 2.5,
+          "sd": 1.4142135623730951,
+          "n": 8
+        },
+        "lineageSurvival": {
+          "mean": 0.3125,
+          "sd": 0.1767766952966369,
+          "n": 8
+        },
+        "degreeEnrichment": {
+          "mean": 1.417532946164105,
+          "sd": 1.1587994979543979,
+          "n": 7
+        },
+        "meanOrganismWordLength": {
+          "mean": 4.370193454672207,
+          "sd": 0.66597090688648,
+          "n": 7
+        },
+        "cladeConcentration": {
+          "mean": 0.008604064678831033,
+          "sd": 0.020776774766995215,
+          "n": 7
+        },
+        "distinctCladeConcentration": {
+          "mean": 0,
+          "sd": 0,
+          "n": 7
+        }
+      },
+      "extinctionCount": 1,
+      "runs": [
+        {
+          "seed": 1,
+          "livingOrganisms": 90,
+          "distinctWords": 28,
+          "everWords": 98,
+          "distinctLineages": 5,
+          "lineageSurvival": 0.625,
+          "degreeEnrichment": 1.6365233419086016,
+          "meanOrganismWordLength": 3.9,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.05380200860832138,
+          "lateBirths": 1394,
+          "lateNovelBirths": 75,
+          "inviableBuds": 14392,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 2,
+          "livingOrganisms": 111,
+          "distinctWords": 32,
+          "everWords": 113,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 1.5736671492344558,
+          "meanOrganismWordLength": 3.6396396396396398,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.055770720371804805,
+          "lateBirths": 1291,
+          "lateNovelBirths": 72,
+          "inviableBuds": 11175,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 3,
+          "livingOrganisms": 0,
+          "distinctWords": 0,
+          "everWords": 9,
+          "distinctLineages": 0,
+          "lineageSurvival": 0,
+          "degreeEnrichment": null,
+          "meanOrganismWordLength": null,
+          "cladeConcentration": null,
+          "distinctCladeConcentration": null,
+          "noveltyRate": null,
+          "lateBirths": 0,
+          "lateNovelBirths": 0,
+          "inviableBuds": 54,
+          "founderCount": 8,
+          "extinctionGen": 35
+        },
+        {
+          "seed": 4,
+          "livingOrganisms": 36,
+          "distinctWords": 4,
+          "everWords": 16,
+          "distinctLineages": 2,
+          "lineageSurvival": 0.25,
+          "degreeEnrichment": 2.0606980201881013,
+          "meanOrganismWordLength": 4.944444444444445,
+          "cladeConcentration": 0.05555555555555555,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.005952380952380952,
+          "lateBirths": 336,
+          "lateNovelBirths": 2,
+          "inviableBuds": 5842,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 5,
+          "livingOrganisms": 193,
+          "distinctWords": 2,
+          "everWords": 11,
+          "distinctLineages": 2,
+          "lineageSurvival": 0.25,
+          "degreeEnrichment": 0,
+          "meanOrganismWordLength": 5,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0,
+          "lateBirths": 1480,
+          "lateNovelBirths": 0,
+          "inviableBuds": 21016,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 6,
+          "livingOrganisms": 73,
+          "distinctWords": 3,
+          "everWords": 8,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 0,
+          "meanOrganismWordLength": 5,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0,
+          "lateBirths": 795,
+          "lateNovelBirths": 0,
+          "inviableBuds": 14184,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 7,
+          "livingOrganisms": 214,
+          "distinctWords": 25,
+          "everWords": 120,
+          "distinctLineages": 3,
+          "lineageSurvival": 0.375,
+          "degreeEnrichment": 3.301052954869831,
+          "meanOrganismWordLength": 4.593457943925234,
+          "cladeConcentration": 0.004672897196261682,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.019825535289452814,
+          "lateBirths": 2522,
+          "lateNovelBirths": 50,
+          "inviableBuds": 28805,
+          "founderCount": 8,
+          "extinctionGen": null
+        },
+        {
+          "seed": 8,
+          "livingOrganisms": 181,
+          "distinctWords": 36,
+          "everWords": 106,
+          "distinctLineages": 2,
+          "lineageSurvival": 0.25,
+          "degreeEnrichment": 1.3507891569477455,
+          "meanOrganismWordLength": 3.5138121546961325,
+          "cladeConcentration": 0,
+          "distinctCladeConcentration": 0,
+          "noveltyRate": 0.03297769156159069,
+          "lateBirths": 2062,
+          "lateNovelBirths": 68,
+          "inviableBuds": 14995,
+          "founderCount": 8,
+          "extinctionGen": null
+        }
+      ]
+    }
+  ]
+}

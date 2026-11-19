@@ -1,0 +1,12 @@
+
+=== minLen 2 ===   (sizes: extra letters lost per single deletion)
+lex       n     mean   p90   p99   max   P(>=5)  P(>=20)  log2-bins[1,2-3,4-7,8-15,16-31,32+]
+real     1000    0.44     2     4     5   0.001   0.000    [0:704] 194 92 10 0 0 0
+markov2  1000    0.52     2     4     7   0.004   0.000    [0:665] 203 119 13 0 0 0
+uniform  1000    0.59     2     5     7   0.010   0.000    [0:636] 224 122 18 0 0 0
+
+=== minLen 3 ===   (sizes: extra letters lost per single deletion)
+lex       n     mean   p90   p99   max   P(>=5)  P(>=20)  log2-bins[1,2-3,4-7,8-15,16-31,32+]
+real     1000    1.01     3     7    16   0.045   0.000    [0:580] 154 181 79 5 1 0
+markov2  1000    1.22     4     9    13   0.050   0.000    [0:516] 168 211 92 13 0 0
+uniform  1000    0.89     3     6     8   0.022   0.000    [0:556] 200 194 48 2 0 0

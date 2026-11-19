@@ -1,0 +1,14 @@
+
+=== tier<=50, minLen=2: 61227 words ===
+lexicon  | reach% (growth)  | subst meanDeg isolated% giant% | bigram-precision L=3,5,7
+real     |  28.3  L4 77% L6 49% |  1.57   55.3    5.5 | 0.0532 8.62e-4 3.98e-6
+markov2  |  30.9  L4 82% L6 58% |  0.68   80.7    4.4 | 0.0541 8.93e-4 4.20e-6
+shuffle  |   4.7  L4 40% L6 5% |  0.16   93.2    2.2 | 0.0340 3.89e-4 1.27e-6
+uniform  |   7.0  L4 48% L6 10% |  0.18   93.8    2.4 | 0.0335 3.78e-4 1.22e-6
+
+=== tier<=50, minLen=3: 61174 words ===
+lexicon  | reach% (growth)  | subst meanDeg isolated% giant% | bigram-precision L=3,5,7
+real     |  21.1  L4 60% L6 37% |  1.57   55.3    5.5 | 0.0532 8.62e-4 3.98e-6
+markov2  |  23.6  L4 60% L6 40% |  0.69   80.6    4.5 | 0.0551 9.25e-4 4.42e-6
+shuffle  |   3.4  L4 22% L6 1% |  0.16   93.3    2.1 | 0.0342 3.93e-4 1.29e-6
+uniform  |   4.7  L4 25% L6 3% |  0.17   93.8    2.4 | 0.0336 3.80e-4 1.23e-6

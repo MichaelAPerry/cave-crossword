@@ -1,0 +1,144 @@
+<title>WordLife Sandbox</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a lab bench. The dish (canvas) dominates on the left; instruments (controls,
+   readouts, inspector) stack in a narrow rail on the right; stacks to one column on phones. */
+:root {
+  --bg: #eef1ee;          /* agar-pale ground, slight green bias */
+  --panel: #f8faf8;
+  --ink: #17201c;
+  --muted: #5d6b64;
+  --line: #cdd6d1;
+  --accent: #1f7a5a;      /* culture green */
+  --fresh: #c4532b;       /* newly born letters */
+  --stress: #b3261e;
+  --cell: #ffffff;
+  --cellText: #17201c;
+  --heat: 31, 122, 90;
+  --f-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1513; --panel: #151d1a; --ink: #e3ebe7; --muted: #8fa198; --line: #26332e;
+  --accent: #4fc196; --fresh: #f08a5d; --stress: #ff6b5e; --cell: #1b2521; --cellText: #e3ebe7;
+  --heat: 79, 193, 150; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1513; --panel: #151d1a; --ink: #e3ebe7; --muted: #8fa198; --line: #26332e;
+  --accent: #4fc196; --fresh: #f08a5d; --stress: #ff6b5e; --cell: #1b2521; --cellText: #e3ebe7;
+  --heat: 79, 193, 150; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 32px }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; max-width: 1180px; margin: 0 auto 14px }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; margin: 0; letter-spacing: -0.01em }
+header p { margin: 0; color: var(--muted); max-width: 70ch }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; max-width: 1180px; margin: 0 auto }
+@media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr) } }
+.dish { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0 }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+canvas#grid { width: 100%; height: auto; display: block; cursor: crosshair; border-radius: 6px; touch-action: manipulation }
+.rail { display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+section.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0 }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 }
+button, select, input { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px }
+button { cursor: pointer; font-weight: 500 }
+button.primary { background: var(--accent); color: var(--panel); border-color: var(--accent) }
+button:hover { border-color: var(--accent) }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+input[type=number] { width: 90px }
+input[type=checkbox] { width: auto }
+.params { display: grid; grid-template-columns: 1fr auto; gap: 5px 8px; align-items: center; font-size: 12.5px }
+.params label { color: var(--muted); font-family: var(--f-mono); font-size: 12px; overflow-wrap: anywhere }
+.readout { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px }
+.readout div { display: flex; flex-direction: column }
+.readout b { font-family: var(--f-mono); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums }
+.readout span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em }
+#chart { width: 100%; height: 90px; display: block }
+.legend { display: flex; gap: 12px; font-size: 11.5px; color: var(--muted) }
+.legend i { display: inline-block; width: 10px; height: 3px; vertical-align: middle; margin-right: 4px }
+.mono { font-family: var(--f-mono); font-size: 12.5px; overflow-wrap: anywhere }
+#species { display: flex; flex-wrap: wrap; gap: 4px }
+#species span { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; background: var(--bg) }
+#species small { color: var(--muted); margin-left: 3px }
+.note { color: var(--muted); font-size: 12px; margin: 0 }
+.gen { font-family: var(--f-mono); font-variant-numeric: tabular-nums; color: var(--muted); margin-left: auto }
+.status { font-size: 12px; color: var(--muted) }
+.chip { display: inline-block; font-size: 11px; border-radius: 999px; padding: 0 7px; border: 1px solid var(--line) }
+.chip.bad { color: var(--stress); border-color: var(--stress) }
+.chip.ok { color: var(--accent); border-color: var(--accent) }
+</style>
+
+<header>
+  <h1>WordLife Sandbox</h1>
+  <p>A petri dish for letters. Pick a model and a lexicon, plant words, and watch what the spelling rules do. The <em>Markov</em> and <em>uniform</em> lexicons are fake English with matched statistics: if a run looks the same with them, the language isn't doing the work.</p>
+</header>
+
+<main>
+  <div class="dish">
+    <div class="bar">
+      <button id="play" class="primary">Play</button>
+      <button id="step">Step</button>
+      <button id="reset">Reset</button>
+      <label for="speed" class="status">speed</label>
+      <input id="speed" type="range" min="1" max="30" value="6" style="width:110px">
+      <span class="gen" id="gen">gen 0</span>
+    </div>
+    <canvas id="grid" width="720" height="720" aria-label="Simulation grid. Click a cell to inspect it, or to plant the word below."></canvas>
+    <div class="bar">
+      <label for="plantWord" class="status">plant</label>
+      <input id="plantWord" value="planet" size="10" autocomplete="off">
+      <select id="plantDir" aria-label="Planting direction"><option value="0">across</option><option value="1">down</option></select>
+      <label class="status"><input type="checkbox" id="plantMode"> click to plant</label>
+      <label class="status"><input type="checkbox" id="heat" checked> show resources</label>
+    </div>
+    <p class="note" id="msg">Loading lexicon…</p>
+  </div>
+
+  <div class="rail">
+    <section class="card">
+      <h2>Experiment</h2>
+      <div class="params">
+        <label for="model">model</label>
+        <select id="model">
+          <option value="crystal">A · Lexical crystal</option>
+          <option value="economy">B · Letter economy</option>
+          <option value="bigram">C · Bigram life (radius 1)</option>
+          <option value="organisms" selected>D · Word organisms</option>
+        </select>
+        <label for="lex">lexicon</label>
+        <select id="lex">
+          <option value="real">English (SCOWL ≤50)</option>
+          <option value="markov2">Markov-2 fake English</option>
+          <option value="shuffle">Shuffled letters</option>
+          <option value="uniform">Uniform random</option>
+        </select>
+        <label for="minLen">min word length</label>
+        <input id="minLen" type="number" min="2" max="4" value="2">
+        <label for="seed">seed</label>
+        <input id="seed" type="number" value="1">
+      </div>
+      <h2>Parameters</h2>
+      <div class="params" id="params"></div>
+      <p class="note">Probabilities apply live. Size and seed changes need Reset.</p>
+    </section>
+
+    <section class="card">
+      <h2>Population</h2>
+      <div class="readout" id="readout"></div>
+      <canvas id="chart" width="600" height="180" aria-label="Density and species over time"></canvas>
+      <div class="legend"><span><i style="background:var(--accent)"></i>species</span><span><i style="background:var(--fresh)"></i>density</span></div>
+      <h2>Most common words</h2>
+      <div id="species"></div>
+    </section>
+
+    <section class="card">
+      <h2>Inspector</h2>
+      <div id="inspect" class="mono">Click a cell.</div>
+    </section>
+  </div>
+</main>
+
+<script type="module" src="app.mjs"></script>

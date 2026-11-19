@@ -1,0 +1,23 @@
+........................................................................
+
+## Run level (per condition, 12 seeds, 600 gens)
+mode        lex       extinct  finalPop        finalLineages  everWords        pop@1stShift
+blind       real      2/12     23.25±16.51     1.50±0.90      227.75±75.32     86.75±33.76
+blind       markov2   1/12     60.17±49.56     1.92±1.08      226.08±73.58     95.50±26.17
+blind       uniform   4/12     27.17±47.09     0.92±0.79      88.08±50.22      77.67±22.22
+exhaustive  real      0/12     445.67±27.91    11.00±1.65     3105.83±168.34   355.00±28.69
+exhaustive  markov2   0/12     443.42±24.28    10.92±1.56     2665.50±140.19   370.17±32.29
+exhaustive  uniform   0/12     467.75±28.33    7.00±2.09      1457.83±79.26    382.50±31.31
+
+## Lineage level: P(organism alive at a shift has a descendant alive at the next shift)
+Only organisms whose own spelling contains a newly banned letter ("hit") vs not.
+
+[blind] lex       all(hit)          all(unhit)        deg0-2(hit)       deg3-6(hit)       deg7-12(hit)      deg13-99(hit)     
+         real      8.8% n=2010       19.3% n=1597      8.4% n=107        5.7% n=297        9.6% n=447        9.2% n=1159       
+         markov2   8.4% n=2082       21.3% n=2127      3.6% n=338        8.0% n=410        9.5% n=443        9.8% n=891        
+         uniform   6.7% n=1441       23.0% n=1110      6.7% n=776        4.7% n=299        6.3% n=160        9.7% n=206        
+
+[exhaustive] lex       all(hit)          all(unhit)        deg0-2(hit)       deg3-6(hit)       deg7-12(hit)      deg13-99(hit)     
+         real      13.1% n=13718     16.6% n=10624     6.7% n=415        12.1% n=1964      14.1% n=3433      13.2% n=7906      
+         markov2   12.6% n=13889     16.5% n=10882     7.4% n=930        13.4% n=2439      12.6% n=3683      12.9% n=6837      
+         uniform   10.9% n=12648     15.7% n=13797     8.4% n=1914       12.6% n=3044      11.8% n=3826      9.8% n=3864       
