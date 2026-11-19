@@ -15,7 +15,7 @@ const [lex, clues] = await Promise.all([loadLexicon({ maxTier: 50, minLen: 3 }),
 const rows = [];
 for (const w of lex.words) {
   if (BLOCK.has(w) || !clues.has(w)) continue;
-  const cs = [0, 1, 2].map(k => clues.get(w, k)).filter(Boolean).map(c => c.replace(/[\t\n<]/g, ' '));
+  const cs = [0, 1, 2, 3].map(k => clues.get(w, k)).filter(Boolean).map(c => c.replace(/[\t\n<]/g, ' '));
   rows.push([w, lex.tier.get(w), ...cs].join('\t'));
 }
 const data = rows.join('\n');

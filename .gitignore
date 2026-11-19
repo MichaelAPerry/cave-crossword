@@ -1,3 +1,4 @@
 data/raw/
 node_modules/
 out/
+data/clues/local_run.log
