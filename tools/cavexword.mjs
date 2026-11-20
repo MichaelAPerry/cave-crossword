@@ -5,7 +5,7 @@ import path from 'node:path';
 import { loadLexicon } from '../src/lexicon.mjs';
 import { loadClueBook } from '../src/clues.mjs';
 import { makeRng } from '../src/rng.mjs';
-import { caveLayout } from '../src/cavexword/layout.mjs';
+import { ENVS } from '../src/cavexword/envs.mjs';
 import { WordIndex, fillWithRock } from '../src/cavexword/fill.mjs';
 import { numberSlots, renderSVG } from '../src/cavexword/render.mjs';
 import { BLOCK } from '../src/cavexword/blocklist.mjs';
@@ -14,6 +14,9 @@ import { buildVocab } from '../src/cavexword/vocab.mjs';
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
 const seed = +arg('seed', 1), w = +arg('w', 34), h = +arg('h', 22), maxTier = +arg('tier', 50);
 const theme = arg('theme', '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+const envId = arg('env', 'cave');
+if (!ENVS[envId]) { console.error(`Unknown --env ${envId}; choose one of: ${Object.keys(ENVS).join(', ')}`); process.exit(1); }
+const env = ENVS[envId];
 const title = arg('title', ''), outBase = arg('out', `out/cave-${seed}`);
 const t0 = performance.now();
 const [lex, clues] = await Promise.all([loadLexicon({ maxTier: 100, minLen: 3 }), loadClueBook()]);
@@ -24,20 +27,20 @@ for (const t of theme) if (!clues.has(t)) console.warn(`theme word "${t}" has no
 let res = null, L = null;
 for (let attempt = 0; attempt < 8 && !res?.ok; attempt++) {
   const rng = makeRng(seed * 1000 + attempt);
-  L = caveLayout({ w, h, rng });
+  L = env.layout({ w, h, rng });
   res = fillWithRock(L, index, { rng, seedWords: theme, onRock: (k) => process.stderr.write('#') }, 30);
   process.stderr.write(res.ok ? '' : 'x');
 }
 process.stderr.write('\n');
-if (!res.ok) { console.error('Could not fill a cave at this size; try a smaller map or another seed.'); process.exit(1); }
+if (!res.ok) { console.error(`Could not fill a ${env.noun} at this size; try a smaller map or another seed.`); process.exit(1); }
 
 const { slots, letters, words } = res;
 const num = numberSlots(L, slots);
 const themeCells = new Set();
 for (const s of slots) if (theme.includes(words[s.id])) s.cells.forEach(c => themeCells.add(c));
 const rr = () => makeRng(seed * 7 + 3);
-const svgPuzzle = renderSVG(L, { num, theme: themeCells, rng: rr(), title });
-const svgKey = renderSVG(L, { num, letters, theme: themeCells, rng: rr(), title: title && title + ' · KEY', showAnswers: true });
+const svgPuzzle = renderSVG(L, { num, theme: themeCells, rng: rr(), title, edge: env.edge });
+const svgKey = renderSVG(L, { num, letters, theme: themeCells, rng: rr(), title: title && title + ' · KEY', showAnswers: true, edge: env.edge });
 const list = (dir) => slots.filter(s => s.dir === dir).sort((a, b) => a.num - b.num)
   .map(s => ({ n: s.num, len: s.len, answer: words[s.id], clue: clues.get(words[s.id]) || '(write a clue)', theme: theme.includes(words[s.id]) }));
 const across = list(0), down = list(1);

@@ -11,7 +11,9 @@
 - **Fills it with real words.** A constraint solver places words; when a region can't be filled, it adds rock and tries again.
 - **Hides your adventure words** (DRAGON, KEY, ALTAR…) in the map and marks their squares ▲. The DM reveals what a room holds when its word is solved.
 - **Uses real crossword clues.** It draws on the [xd corpus](https://xd.saul.pw): 11.6 million clues from published crosswords, filtered to clues that make sense outside their original puzzle. Princeton WordNet fills any gaps. Every clue is editable, and ↻ cycles through alternatives.
-- **Same seed, same cave.** Maps are fully reproducible.
+- **Four environments:** cave, dungeon (rooms, pillars and masonry walls), overgrown forest (clearings and winding paths) and flooded ruins (platforms and causeways). Each has its own layout generator and hand-inked edge style.
+- **Prints on one sheet.** The printout uses a black-on-white version of the map, with all the clues below it.
+- **Same seed, same map.** Maps are fully reproducible.
 
 ## Use it
 Browser: open `dist/cave-crossword.html`, enter a title and adventure words, then click Generate. Save the map as SVG, save the puzzle sheet, or print.

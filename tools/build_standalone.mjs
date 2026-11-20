@@ -8,7 +8,7 @@ import { buildVocab } from '../src/cavexword/vocab.mjs';
 const root = new URL('../', import.meta.url);
 const read = (p) => fs.readFileSync(new URL(p, root), 'utf8');
 const strip = (src) => src.replace(/^import .*?;\s*$/gm, '').replace(/^export\s+(?=(const|function|class|let|async))/gm, '');
-const engine = ['src/rng.mjs', 'src/cavexword/blocklist.mjs', 'src/cavexword/layout.mjs', 'src/cavexword/fill.mjs', 'src/cavexword/render.mjs']
+const engine = ['src/rng.mjs', 'src/cavexword/blocklist.mjs', 'src/cavexword/layout.mjs', 'src/cavexword/envs.mjs', 'src/cavexword/fill.mjs', 'src/cavexword/walls.mjs', 'src/cavexword/render.mjs']
   .map(p => `// --- ${p}\n` + strip(read(p))).join('\n');
 
 const [lex, clues] = await Promise.all([loadLexicon({ maxTier: 50, minLen: 3 }), loadClueBook()]);

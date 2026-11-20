@@ -1,4 +1,4 @@
-// UI for the standalone Cave Crossword page. ENGINE globals (makeRng, caveLayout, WordIndex,
+// UI for the standalone Cave Crossword page. ENGINE globals (makeRng, ENVS, WordIndex,
 // fillWithRock, numberSlots, renderSVG, BLOCK) come from the inline engine script.
 const $ = (id) => document.getElementById(id);
 const DATA = $('data').textContent;
@@ -31,13 +31,14 @@ function workerMain() {
     }
   };
 }
-function generate(index, { seed, w, h, theme }, progress) {
+function generate(index, { seed, w, h, theme, env }, progress) {
+  const E = ENVS[env] || ENVS.cave;
   let res = null, L = null, attempt = 0;
   for (; attempt < 8 && !res?.ok; attempt++) {
     const rng = makeRng(seed * 1000 + attempt);
-    L = caveLayout({ w, h, rng });
-    progress(`Carving cave ${attempt + 1}…`);
-    res = fillWithRock(L, index, { rng, seedWords: theme, onRock: (k) => progress(`Cave ${attempt + 1}: shoring up rock (${k + 1})…`) }, 30);
+    L = E.layout({ w, h, rng });
+    progress(`Carving ${E.noun} ${attempt + 1}…`);
+    res = fillWithRock(L, index, { rng, seedWords: theme, onRock: (k) => progress(`${E.name} ${attempt + 1}: adjusting the map (${k + 1})…`) }, 30);
   }
   if (!res.ok) return { ok: false };
   return { ok: true, w: L.w, h: L.h, c: [...L.c], letters: [...res.letters],
@@ -57,14 +58,14 @@ function readTheme() {
 
 function go() {
   if (busy) return;
-  busy = true; $('gen').disabled = true; $('status').textContent = 'Carving cave…';
+  busy = true; $('gen').disabled = true; $('status').textContent = `Carving ${ENVS[$('env').value].noun}…`;
   const sz = { small: [26, 18], medium: [34, 22], large: [40, 26] }[$('size').value];
-  const msg = { type: 'gen', seed: +$('seed').value || 1, w: sz[0], h: sz[1], theme: readTheme() };
+  const msg = { type: 'gen', seed: +$('seed').value || 1, w: sz[0], h: sz[1], theme: readTheme(), env: $('env').value };
   const t0 = performance.now();
   const finish = (r) => {
     busy = false; $('gen').disabled = false;
-    if (!r.ok) { $('status').textContent = 'That cave would not fill. Try another seed or a smaller size.'; return; }
-    state = { ...r, theme: msg.theme, seed: msg.seed, edits: new Map() };
+    if (!r.ok) { $('status').textContent = `That ${ENVS[msg.env].noun} would not fill. Try another seed or a smaller size.`; return; }
+    state = { ...r, theme: msg.theme, seed: msg.seed, env: msg.env, edits: new Map() };
     show();
     const placed = r.slots.filter(s => msg.theme.includes(s.word)).length;
     $('status').textContent = `${r.slots.length} words on ${r.c.filter(Boolean).length} squares in ${((performance.now() - t0) / 1000).toFixed(1)} s` +
@@ -92,8 +93,10 @@ function show() {
   const themeCells = new Set();
   for (const s of slots) if (state.theme.includes(s.word)) s.cells.forEach(c => themeCells.add(c));
   const svg = renderSVG(L, { num, letters: Int8Array.from(state.letters), theme: themeCells, rng: makeRng(state.seed * 7 + 3),
-    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked });
+    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked, edge: ENVS[state.env || 'cave'].edge });
   $('map').innerHTML = svg;
+  $('mapPrint').innerHTML = renderSVG(L, { num, letters: Int8Array.from(state.letters), theme: themeCells, rng: makeRng(state.seed * 7 + 3),
+    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked, paper: true, edge: ENVS[state.env || 'cave'].edge });
   state.svg = svg;
   for (const dir of [0, 1]) {
     const ol = $(dir ? 'down' : 'across'); ol.replaceChildren();

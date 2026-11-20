@@ -50,9 +50,26 @@ body.key .ans { display: inline }
 .hint { color: var(--dim); font-size: 14px; margin: 0 }
 footer { color: var(--dim); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 12px }
 footer a { color: var(--bone) }
+#mapPrint { display: none }
 @media print {
+  @page { margin: 10mm }
   .bar, header p, #status, .hint, footer, .alt { display: none !important }
-  html, body { background: #fff; color: #000 } h1, h2 { color: #000 }
+  html, body { background: #fff !important; color: #000 !important; color-scheme: light }
+  body { padding: 0; font-size: 7.5pt; line-height: 1.15 }
+  .wrap { max-width: none; gap: 3mm }
+  h1, h2 { color: #000 } h1 { font-size: 16pt; line-height: 1.1 }
+  header { display: none }
+  #map { display: none }
+  #mapPrint { display: block; break-inside: avoid }
+  #mapPrint svg { max-height: 135mm; width: auto; max-width: 100%; height: auto; margin: 0 auto; display: block }
+  .cols { display: block; column-count: 5; column-gap: 4mm }
+  .cols section { display: block }
+  h2 { font-size: 10pt; margin: 0 0 1mm; border-bottom: 1px solid #000; break-after: avoid }
+  .cols section + section h2 { margin-top: 2mm }
+  ol { padding-left: 1.7em }
+  li { padding: 0; break-inside: avoid } li::marker, .len { color: #000 }
+  li.adv .clue { color: #000; font-weight: 600 } li.adv::marker { color: #000 }
+  .ans { display: none !important } body.key .ans { display: inline !important; color: #000; font-size: 7pt }
 }
 </style>
 </head>
@@ -66,6 +83,8 @@ footer a { color: var(--bone) }
   <div class="bar">
     <div class="field"><label for="title">Map title</label><input id="title" value="The Sunken Stair"></div>
     <div class="field"><label for="theme">Adventure words</label><input id="theme" value="dragon, torch, key, gold, trap, altar, ghost, rope"></div>
+    <div class="field"><label for="env">Environment</label>
+      <select id="env"><option value="cave" selected>Cave</option><option value="dungeon">Dungeon</option><option value="forest">Overgrown forest</option><option value="sunken">Flooded ruins</option></select></div>
     <div class="field"><label for="size">Size</label>
       <select id="size"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select></div>
     <div class="field"><label for="seed">Seed</label><input id="seed" type="number" min="1" value="11"></div>
@@ -80,6 +99,7 @@ footer a { color: var(--bone) }
 
   <div id="out" hidden>
     <div id="map"></div>
+    <div id="mapPrint" aria-hidden="true"></div>
     <p class="hint">Squares marked ▲ hold your adventure words. Click any clue to rewrite it, or ↻ for another clue.</p>
     <div class="cols">
       <section><h2>Across</h2><ol id="across"></ol></section>
@@ -87,7 +107,7 @@ footer a { color: var(--bone) }
     </div>
   </div>
 
-  <footer>Runs entirely in your browser; nothing is sent anywhere. Clues from published crosswords via the <a href="https://xd.saul.pw">xd corpus</a> (Saul Pwanson), with Princeton WordNet 3.0 as a fallback. Words from SCOWL and ENABLE. Same seed, same cave.</footer>
+  <footer>Runs entirely in your browser; nothing is sent anywhere. Clues from published crosswords via the <a href="https://xd.saul.pw">xd corpus</a> (Saul Pwanson), with Princeton WordNet 3.0 as a fallback. Words from SCOWL and ENABLE. Same seed, same map.</footer>
 </div>
 <script id="data" type="text/plain">aardvark	20	Anteater	Ant eater	Termite predator
 aardvarks	50	Burrowing mammals	Long-nosed mammals	Animals that consume ants
@@ -77571,6 +77591,188 @@ function keepLargest(L) {
   for (let i = 0; i < c.length; i++) if (c[i] && comp[i] !== best) c[i] = 0;
 }
 
+// --- src/cavexword/envs.mjs
+// Environments: each one is a layout generator (1 = floor/letter cell, 0 = rock/wall/water)
+// plus an edge-drawing style id (see walls.mjs). Every layout is crossword-legal on exit
+// (no 2-runs, runs <= 9, one connected piece) because it ends in legalize().
+
+const MAXRUN = 9;
+const comps = (c, w, h) => {
+  const seen = new Uint8Array(c.length), st = []; let n = 0;
+  for (let s = 0; s < c.length; s++) {
+    if (!c[s] || seen[s]) continue;
+    n++; seen[s] = 1; st.push(s);
+    while (st.length) {
+      const i = st.pop(), x = i % w, y = (i / w) | 0;
+      if (x > 0 && c[i - 1] && !seen[i - 1]) { seen[i - 1] = 1; st.push(i - 1); }
+      if (x < w - 1 && c[i + 1] && !seen[i + 1]) { seen[i + 1] = 1; st.push(i + 1); }
+      if (y > 0 && c[i - w] && !seen[i - w]) { seen[i - w] = 1; st.push(i - w); }
+      if (y < h - 1 && c[i + w] && !seen[i + w]) { seen[i + w] = 1; st.push(i + w); }
+    }
+  }
+  return n;
+};
+
+// Gentler than legalize(): fix 2-runs and long runs while keeping the map connected
+// (remove a cell that does not disconnect, or grow a 2-run to 3), then call legalize().
+function softLegalize(L, rng) {
+  const { w, h, c } = L;
+  let base = 0;
+  const removable = (i) => { c[i] = 0; const ok = comps(c, w, h) <= base; c[i] = 1; return ok; };
+  for (let it = 0; it < 500; it++) {
+    base = comps(c, w, h);
+    const bad = runsOf(L).find(r => r.cells.length === 2 || r.cells.length > MAXRUN);
+    if (!bad) break;
+    const n = bad.cells.length;
+    if (n === 2) {
+      const [a, b] = bad.cells, order = rng.next() < 0.5 ? [a, b] : [b, a];
+      const step = bad.dir ? w : 1;
+      const rem = order.find(removable);
+      if (rem !== undefined) { c[rem] = 0; continue; }
+      const before = a - step, after = b + step;
+      const okB = (i) => i >= 0 && i < c.length && !c[i];
+      const x0 = a % w, y0 = (a / w) | 0;
+      if (!bad.dir && x0 > 1 && okB(before)) c[before] = 1;
+      else if (!bad.dir && x0 + 2 < w - 1 && okB(after)) c[after] = 1;
+      else if (bad.dir && y0 > 1 && okB(before)) c[before] = 1;
+      else if (bad.dir && y0 + 2 < h - 1 && okB(after)) c[after] = 1;
+      else c[order[0]] = 0;
+    } else {
+      const ks = []; for (let k = 3; k <= n - 4; k++) ks.push(k);
+      rng.shuffle(ks);
+      const interior = (k) => { const i = bad.cells[k], p = bad.dir ? 1 : w; return c[i - p] && c[i + p] ? 0 : 1; };
+      ks.sort((p, q) => interior(p) - interior(q));
+      const k = ks.find(k => removable(bad.cells[k]));
+      c[bad.cells[k === undefined ? ks[0] : k]] = 0;
+    }
+  }
+  legalize(L, MAXRUN, rng);
+}
+
+// ---- shared room machinery -------------------------------------------------------------
+const mkRoom = (x, y, spec) => {
+  const cells = [];
+  for (let dy = 0; dy < spec.h; dy++) for (let dx = 0; dx < spec.w; dx++) if (spec.has(dx, dy)) cells.push([x + dx, y + dy]);
+  const cx = x + (spec.w - 1) / 2, cy = y + (spec.h - 1) / 2;
+  let best = cells[0], bd = 1e9;
+  for (const p of cells) { const d = Math.abs(p[0] - cx) + Math.abs(p[1] - cy); if (d < bd) { bd = d; best = p; } }
+  return { x, y, w: spec.w, h: spec.h, cells, anchor: best, set: null };
+};
+function placeRooms(w, h, rng, count, gap, pickSpec) {
+  const rooms = [];
+  for (let t = 0; t < count * 40 && rooms.length < count; t++) {
+    const spec = pickSpec(rng);
+    if (spec.w > w - 2 || spec.h > h - 2) continue;
+    const x = 1 + rng.int(w - 1 - spec.w), y = 1 + rng.int(h - 1 - spec.h);
+    if (rooms.some(r => x < r.x + r.w + gap && r.x < x + spec.w + gap && y < r.y + r.h + gap && r.y < y + spec.h + gap)) continue;
+    rooms.push(mkRoom(x, y, spec));
+  }
+  for (const r of rooms) r.set = new Set(r.cells.map(([x, y]) => y * w + x));
+  return rooms;
+}
+// Walk from a start cell until inside the target room. straight: L-shaped, longest axis first.
+// otherwise: short random segments (winding) with occasional detours.
+function route(g, w, h, [sx, sy], T, rng, { straight = true, segMin = 2, segMax = 5, detour = 0 } = {}) {
+  let x = sx, y = sy;
+  const put = (xx, yy) => { if (xx > 0 && yy > 0 && xx < w - 1 && yy < h - 1) g[yy * w + xx] = 1; };
+  const bx1 = T.x + T.w - 1, by1 = T.y + T.h - 1;
+  let lastH = null;
+  for (let guard = 0; guard < 160; guard++) {
+    if (T.set.has(y * w + x)) return;
+    const dx = x < T.x ? T.x - x : x > bx1 ? bx1 - x : 0, dy = y < T.y ? T.y - y : y > by1 ? by1 - y : 0;
+    if (!dx && !dy) { // inside bbox but on a notch: finish straight to the anchor
+      const [ax, ay] = T.anchor;
+      while (x !== ax) { x += Math.sign(ax - x); put(x, y); }
+      while (y !== ay) { y += Math.sign(ay - y); put(x, y); }
+      return;
+    }
+    let horiz, len, dir;
+    if (!straight && detour && rng.next() < detour) {
+      horiz = rng.next() < 0.5; dir = rng.next() < 0.5 ? -1 : 1; len = 3 + rng.int(2);
+      const nx = x + (horiz ? dir * len : 0), ny = y + (horiz ? 0 : dir * len);
+      if (nx < 2 || ny < 2 || nx > w - 3 || ny > h - 3) continue;
+    } else {
+      horiz = dx && dy ? (straight ? Math.abs(dx) >= Math.abs(dy) : lastH === null ? rng.next() < 0.5 : !lastH) : !!dx;
+      const d = horiz ? dx : dy; dir = Math.sign(d);
+      len = straight ? Math.abs(d) : Math.min(Math.abs(d), segMin + rng.int(segMax - segMin + 1));
+      // keep the run through this cell within the crossword limit; otherwise jog sideways
+      let base = 1;
+      for (let k = 1; ; k++) { const xx = x - (horiz ? k : 0), yy = y - (horiz ? 0 : k); if (xx < 0 || yy < 0 || !g[yy * w + xx]) break; base++; }
+      for (let k = 1; ; k++) { const xx = x + (horiz ? k : 0), yy = y + (horiz ? 0 : k); if (xx >= w || yy >= h || !g[yy * w + xx]) break; base++; }
+      let allow = MAXRUN - base;
+      if (len === Math.abs(d)) allow -= (horiz ? T.w : T.h) - 1;
+      if (allow < 2) {
+        horiz = !horiz; const d2 = horiz ? dx : dy;
+        dir = d2 ? Math.sign(d2) : (rng.next() < 0.5 ? -1 : 1); len = 3;
+        const nx = x + (horiz ? dir * len : 0), ny = y + (horiz ? 0 : dir * len);
+        if (nx < 2 || ny < 2 || nx > w - 3 || ny > h - 3) dir = -dir;
+      } else len = Math.min(len, allow);
+    }
+    lastH = horiz;
+    for (let k = 0; k < len; k++) { if (horiz) x += dir; else y += dir; put(x, y); }
+  }
+}
+function connectRooms(g, w, h, rooms, rng, extra, opts) {
+  if (rooms.length < 2) return;
+  const dist = (a, b) => Math.abs(a.anchor[0] - b.anchor[0]) + Math.abs(a.anchor[1] - b.anchor[1]);
+  const inTree = [0], edges = [];
+  const rest = new Set(rooms.map((_, i) => i)); rest.delete(0);
+  while (rest.size) {
+    let bi = -1, bj = -1, bd = 1e9;
+    for (const i of inTree) for (const j of rest) { const d = dist(rooms[i], rooms[j]) + rng.next() * 3; if (d < bd) { bd = d; bi = i; bj = j; } }
+    edges.push([bi, bj]); inTree.push(bj); rest.delete(bj);
+  }
+  for (let k = 0; k < extra; k++) {
+    const i = rng.int(rooms.length), near = rooms.map((r, j) => [dist(rooms[i], r), j]).filter(p => p[1] !== i).sort((a, b) => a[0] - b[0]).slice(0, 3);
+    if (near.length) edges.push([i, rng.pick(near)[1]]);
+  }
+  for (const [i, j] of edges) route(g, w, h, rooms[i].anchor, rooms[j], rng, opts);
+}
+const carveRooms = (g, w, rooms) => { for (const r of rooms) for (const [x, y] of r.cells) g[y * w + x] = 1; };
+const pickW = (list) => (rng) => { let t = rng.next() * list.reduce((a, s) => a + s[0], 0); for (const [wt, s] of list) { if ((t -= wt) < 0) return s; } return list[0][1]; };
+const rect = (w, h) => ({ w, h, has: () => true });
+const pillared = (w, h) => ({ w, h, has: (x, y) => !(x % 2 && y % 2) });
+const octa = (w, h, cut = 1) => ({ w, h, has: (x, y) => !((x < cut || x >= w - cut) && (y < cut || y >= h - cut)) });
+const plus = (w, h) => ({ w, h, has: (x, y) => x === (w >> 1) || y === (h >> 1) || (x > 0 && y > 0 && x < w - 1 && y < h - 1) });
+const disc = (r2) => { const r = Math.ceil(Math.sqrt(r2)), n = 2 * r + 1; return { w: n, h: n, has: (x, y) => (x - r) ** 2 + (y - r) ** 2 <= r2 }; };
+
+// ---- layouts ---------------------------------------------------------------------------
+function dungeonLayout({ w = 34, h = 22, rng }) {
+  const g = new Uint8Array(w * h);
+  const rooms = placeRooms(w, h, rng, Math.max(4, Math.round(w * h / 52)), 2, pickW([
+    [3, rect(3, 3)], [3, rect(3, 4)], [2, rect(4, 3)], [2, rect(4, 4)], [2, rect(3, 5)], [2, rect(5, 3)],
+    [2, rect(3, 6)], [2, rect(6, 3)], [3, pillared(5, 5)], [1, pillared(7, 5)], [1, pillared(5, 7)], [1, rect(7, 3)],
+  ]));
+  carveRooms(g, w, rooms);
+  connectRooms(g, w, h, rooms, rng, 2, { straight: true });
+  const L = { w, h, c: g }; softLegalize(L, rng); return L;
+}
+function forestLayout({ w = 34, h = 22, rng }) {
+  const g = new Uint8Array(w * h);
+  const rooms = placeRooms(w, h, rng, Math.max(4, Math.round(w * h / 70)), 3, pickW([
+    [2, disc(4)], [3, disc(5)], [1, rect(3, 3)], [1, octa(4, 4)], [1, disc(8)],
+  ]));
+  carveRooms(g, w, rooms);
+  connectRooms(g, w, h, rooms, rng, 2, { straight: false, segMin: 2, segMax: 5, detour: 0.22 });
+  const L = { w, h, c: g }; softLegalize(L, rng); return L;
+}
+function sunkenLayout({ w = 34, h = 22, rng }) {
+  const g = new Uint8Array(w * h);
+  const rooms = placeRooms(w, h, rng, Math.max(5, Math.round(w * h / 48)), 3, pickW([
+    [3, octa(5, 5)], [2, plus(5, 5)], [3, plus(3, 3)], [2, rect(3, 3)], [2, octa(4, 4)], [2, octa(5, 3, 1)], [1, octa(7, 5, 2)],
+  ]));
+  carveRooms(g, w, rooms);
+  connectRooms(g, w, h, rooms, rng, 4, { straight: true });
+  const L = { w, h, c: g }; softLegalize(L, rng); return L;
+}
+
+const ENVS = {
+  cave: { name: 'Cave', layout: (o) => caveLayout(o), edge: 'hatch', noun: 'cave' },
+  dungeon: { name: 'Dungeon', layout: dungeonLayout, edge: 'masonry', noun: 'dungeon' },
+  forest: { name: 'Overgrown forest', layout: forestLayout, edge: 'canopy', noun: 'forest' },
+  sunken: { name: 'Flooded ruins', layout: sunkenLayout, edge: 'water', noun: 'ruin' },
+};
+
 // --- src/cavexword/fill.mjs
 // Crossword filler for arbitrary shapes: slots = maximal runs of length >= 3 (cells in a
 // 1-run in one direction are unchecked). Bitset domains, MRV, forward checking, restarts.
@@ -77687,9 +77889,154 @@ function fillWithRock(L, index, opts, maxRock = 40) {
   return { ok: false };
 }
 
+// --- src/cavexword/walls.mjs
+// Wall/edge drawing styles for the non-cave environments. Each style returns SVG strings
+// drawn *under* the floor squares. ctx = { L, cell, oy, rng, ink, bg } where ink is the
+// line colour (bone on screen, black on paper) and bg the colour used to occlude overlaps.
+const f1 = (v) => v.toFixed(1);
+
+// Chebyshev distance from each rock cell to the nearest floor cell, capped at `cap`.
+function rockDist(L, cap) {
+  const { w, h, c } = L, d = new Uint8Array(w * h).fill(255), q = [];
+  for (let i = 0; i < c.length; i++) if (c[i]) { d[i] = 0; q.push(i); }
+  for (let qi = 0; qi < q.length; qi++) {
+    const i = q[qi], x = i % w, y = (i / w) | 0;
+    if (d[i] >= cap) continue;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      const xx = x + dx, yy = y + dy;
+      if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue;
+      const j = yy * w + xx;
+      if (d[j] === 255) { d[j] = d[i] + 1; q.push(j); }
+    }
+  }
+  return d;
+}
+
+// Old-school dungeon masonry: a one-cell-thick wall of offset blocks, ruled with a heavy
+// line on the room side and a lighter one on the outside, stippled rock beyond.
+function masonry({ L, cell, oy, rng, ink }) {
+  const { w, h, c } = L, d = rockDist(L, 3), o = [], thick = [], thin = [], dots = [];
+  const cat = (x, y) => (x < 0 || y < 0 || x >= w || y >= h) ? 9 : c[y * w + x] ? 0 : d[y * w + x];
+  const half = cell / 2;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const k = cat(x, y); if (k === 0 || k === 9) continue;
+    const X = x * cell, Y = y * cell + oy;
+    if (k === 1) {
+      // horizontal course lines (mid-cell always; top edge when the cell above is also wall)
+      thin.push(`M${X} ${f1(Y + half)}h${cell}`);
+      for (let course = 0; course < 2; course++) {
+        const gy = y * 2 + course, off = (gy & 1) ? half / 2 : 0, yy = Y + course * half;
+        for (let jx = off + half; jx < cell; jx += half) thin.push(`M${f1(X + jx + (rng.next() - 0.5) * 1.6)} ${f1(yy)}v${half}`);
+        if (off) thin.push(`M${f1(X + off)} ${f1(yy)}v${half}`);
+      }
+    } else if (k >= 2) {
+      const n = k === 2 ? 3 : 1;
+      for (let i = 0; i < n; i++) dots.push(`M${f1(X + 2 + rng.next() * (cell - 4))} ${f1(Y + 2 + rng.next() * (cell - 4))}h0.1`);
+    }
+  }
+  // wall rules: heavy on floor edges, medium on outer edges of the wall band, thin between cells
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const k = cat(x, y); if (k !== 1) continue;
+    const X = x * cell, Y = y * cell + oy;
+    const edges = [[0, -1, `M${X} ${Y}h${cell}`], [0, 1, `M${X} ${Y + cell}h${cell}`], [-1, 0, `M${X} ${Y}v${cell}`], [1, 0, `M${X + cell} ${Y}v${cell}`]];
+    for (const [dx, dy, p] of edges) {
+      const nk = cat(x + dx, y + dy);
+      if (nk === 0) thick.push(p); else if (nk !== 1) o.push(p); else if ((dx === 0 && dy < 0) || (dx < 0 && dy === 0)) thin.push(p);
+    }
+  }
+  return [
+    `<path d="${dots.join('')}" stroke="${ink}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.55"/>`,
+    `<path d="${thin.join('')}" stroke="${ink}" stroke-width="0.8" fill="none" opacity="0.8"/>`,
+    `<path d="${o.join('')}" stroke="${ink}" stroke-width="1.6" fill="none" stroke-linecap="square"/>`,
+    `<path d="${thick.join('')}" stroke="${ink}" stroke-width="3.4" fill="none" stroke-linecap="square"/>`,
+  ];
+}
+
+// Tree canopy: back-to-front scalloped crowns (filled with the background so they overlap
+// cleanly), densest next to the paths, thinning out with distance.
+function canopy({ L, cell, oy, rng, ink, bg }) {
+  const { w, h, c } = L, d = rockDist(L, 3), items = [];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (c[y * w + x]) continue;
+    const k = d[y * w + x]; if (k > 3) continue;
+    const n = k === 1 ? 2 + (rng.next() < 0.5 ? 1 : 0) : k === 2 ? 1 + (rng.next() < 0.6 ? 1 : 0) : (rng.next() < 0.45 ? 1 : 0);
+    for (let i = 0; i < n; i++) {
+      const cx = (x + 0.15 + rng.next() * 0.7) * cell, cy = (y + 0.15 + rng.next() * 0.7) * cell + oy;
+      items.push({ k, cx, cy, r: (k === 1 ? 8.5 : k === 2 ? 8 : 6.5) + rng.next() * 3, nb: 7 + rng.int(4), rot: rng.next() * 6.283, kind: rng.int(3) });
+    }
+  }
+  items.sort((a, b) => b.k - a.k || a.cy - b.cy);
+  const scallop = (cx, cy, r, nb, rot) => {
+    const pts = [];
+    for (let i = 0; i < nb; i++) { const a = rot + i / nb * 6.2832; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    const rb = r * Math.sin(Math.PI / nb) * 1.08;
+    return `M${f1(pts[0][0])} ${f1(pts[0][1])}` + pts.slice(1).concat([pts[0]]).map(p => `A${f1(rb)} ${f1(rb)} 0 0 1 ${f1(p[0])} ${f1(p[1])}`).join('') + 'Z';
+  };
+  const o = [];
+  for (const t of items) {
+    o.push(`<path d="${scallop(t.cx, t.cy, t.r, t.nb, t.rot)}" fill="${bg}" stroke="${ink}" stroke-width="1.1" stroke-linejoin="round"/>`);
+    const m = [];
+    // shading on the shadow side (lower right): an inner arc hugging the rim, plus short
+    // hatch ticks on some crowns. Nothing centred, so crowns don't read as faces.
+    const rr = t.r * 0.62, a0 = 0.15 + t.rot * 0.05, a1 = a0 + 1.35;
+    m.push(`M${f1(t.cx + Math.cos(a0) * rr)} ${f1(t.cy + Math.sin(a0) * rr)}A${f1(rr)} ${f1(rr)} 0 0 1 ${f1(t.cx + Math.cos(a1) * rr)} ${f1(t.cy + Math.sin(a1) * rr)}`);
+    if (t.kind !== 0) for (let j = 0; j < 2 + t.kind - 1; j++) {
+      const ang = 0.45 + j * 0.38, x = t.cx + Math.cos(ang) * t.r * 0.42, y = t.cy + Math.sin(ang) * t.r * 0.42;
+      m.push(`M${f1(x)} ${f1(y)}l${f1(t.r * 0.16)} ${f1(-t.r * 0.16)}`);
+    }
+    o.push(`<path d="${m.join('')}" fill="none" stroke="${ink}" stroke-width="0.9" stroke-linecap="round"/>`);
+  }
+  return o;
+}
+
+// Water: wavy shoreline double-rule around every island, then ripple dashes that thin out
+// with distance from the shore.
+function water({ L, cell, oy, rng, ink }) {
+  const { w, h, c } = L, d = rockDist(L, 4), shore = [], rip = [];
+  const floor = (x, y) => x >= 0 && y >= 0 && x < w && y < h && c[y * w + x];
+  // wavy polyline from (x,y) along (ax,ay) of length len, offset normal (nx,ny) by `off`
+  const wave = (x, y, ax, ay, len, nx, ny, off, amp, phase) => {
+    const pts = [];
+    for (let s = 0; s <= len; s += 2) {
+      const dd = off + Math.sin(s / 11 * 6.2832 + phase) * amp;
+      pts.push(`${f1(x + ax * s + nx * dd)} ${f1(y + ay * s + ny * dd)}`);
+    }
+    return 'M' + pts.join('L');
+  };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (c[y * w + x]) continue;
+    const X = x * cell, Y = y * cell + oy;
+    for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
+      if (!floor(x + dx, y + dy)) continue;
+      // edge of this water cell facing the floor; the normal points into the water
+      const nx = -dx, ny = -dy, ph = ((dx ? Y : X) / 11) * 6.2832;
+      const bx = dx ? (dx < 0 ? X : X + cell) : X, by = dy ? (dy < 0 ? Y : Y + cell) : Y;
+      const ax = dx ? 0 : 1, ay = dx ? 1 : 0;
+      shore.push(wave(bx, by, ax, ay, cell, nx, ny, 3, 1.2, ph));
+      shore.push(wave(bx, by, ax, ay, cell, nx, ny, 8, 1.2, ph));
+    }
+    const k = d[y * w + x];
+    if (k >= 1 && k <= 4) {
+      const n = k === 1 ? 0 : k === 2 ? 2 : k === 3 ? 1 : (rng.next() < 0.5 ? 1 : 0);
+      for (let i = 0; i < n; i++) {
+        const len = 12 + rng.next() * 8, px = X + 2 + rng.next() * (cell - len - 2 > 0 ? cell - len - 2 : 0), py = Y + 4 + rng.next() * (cell - 8);
+        rip.push(wave(px, py, 1, 0, Math.min(len, cell - 2), 0, 1, 0, 1.3, rng.next() * 6));
+      }
+    }
+  }
+  return [
+    `<path d="${rip.join('')}" stroke="${ink}" stroke-width="0.9" fill="none" opacity="0.75" stroke-linecap="round"/>`,
+    `<path d="${shore.join('')}" stroke="${ink}" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.9"/>`,
+  ];
+}
+
+const WALL_STYLES = { masonry, canopy, water };
+function drawWalls(style, ctx) { return WALL_STYLES[style]?.(ctx) ?? []; }
+
 // --- src/cavexword/render.mjs
 // SVG rendering: ink-on-black cave map. Rock edges get procedural hatching (rule-based,
 // seeded), floor cells are crossword squares with clue numbers. Optional answer letters.
+
 function numberSlots(L, slots) {
   const starts = new Map();
   for (const s of slots) { const c = s.cells[0]; if (!starts.has(c)) starts.set(c, []); starts.get(c).push(s); }
@@ -77698,22 +78045,30 @@ function numberSlots(L, slots) {
   return num;
 }
 
-function renderSVG(L, { letters = null, num, theme = new Set(), rng, cell = 22, showAnswers = false, title = '' }) {
+// Colour palettes: 'screen' is ink-on-black, 'paper' is black ink on white for printing.
+const PALETTES = {
+  screen: { bg: '#0c0c0c', title: '#eee', hatch: '#d8d8d8', sq: '#fafafa', adv: '#e9e4d4', grid: '#555', mark: '#8a2a1a', num: '#222', letter: '#111' },
+  paper: { bg: null, title: '#000', hatch: '#000', sq: '#fff', adv: '#d9d9d9', grid: '#333', mark: '#222', num: '#000', letter: '#000' },
+};
+
+function renderSVG(L, { letters = null, num, theme = new Set(), rng, cell = 22, showAnswers = false, title = '', paper = false, edge = 'hatch' }) {
+  const P = paper ? PALETTES.paper : PALETTES.screen;
   const { w, h, c } = L, oy = title ? 40 : 0;
   // crop to the cave's bounding box (+1 cell of rock for the hatching)
   let x0 = w, x1 = 0, y0 = h, y1 = 0;
   for (let i = 0; i < c.length; i++) if (c[i]) { const x = i % w, y = (i / w) | 0; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
-  x0 = Math.max(0, x0 - 1); y0 = Math.max(0, y0 - 1); x1 = Math.min(w - 1, x1 + 1); y1 = Math.min(h - 1, y1 + 1);
+  const mg = edge === 'hatch' ? 1 : 2;
+  x0 = Math.max(0, x0 - mg); y0 = Math.max(0, y0 - mg); x1 = Math.min(w - 1, x1 + mg); y1 = Math.min(h - 1, y1 + mg);
   const vx = x0 * cell, vy = y0 * cell, W = (x1 - x0 + 1) * cell, Hh = (y1 - y0 + 1) * cell + oy;
   const out = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vx} ${vy} ${W} ${Hh}" width="${W}" height="${Hh}" font-family="Georgia, serif">`,
-    `<rect x="${vx}" y="${vy}" width="${W}" height="${Hh}" fill="#0c0c0c"/>`];
-  if (title) out.push(`<text x="${vx + W / 2}" y="${vy + 28}" fill="#eee" font-size="22" text-anchor="middle" letter-spacing="3">${title}</text>`);
+    ...(P.bg ? [`<rect x="${vx}" y="${vy}" width="${W}" height="${Hh}" fill="${P.bg}"/>`] : [])];
+  if (title) out.push(`<text x="${vx + W / 2}" y="${vy + 28}" fill="${P.title}" font-size="22" text-anchor="middle" letter-spacing="3">${title}</text>`);
   const floor = (x, y) => x >= 0 && y >= 0 && x < w && y < h && c[y * w + x];
   const jit = (a) => (rng.next() - 0.5) * a;
   // hatching on rock cells bordering floor
   const strokes = [];
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    if (c[y * w + x]) continue;
+    if (c[y * w + x] || edge !== 'hatch') continue;
     const X = x * cell, Y = y * cell + oy + vy * 0;
     for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
       if (!floor(x + dx, y + dy)) continue;
@@ -77732,21 +78087,22 @@ function renderSVG(L, { letters = null, num, theme = new Set(), rng, cell = 22, 
       strokes.push('M' + pts.map(p => p.map(v => v.toFixed(1)).join(' ')).join('L'));
     }
   }
-  out.push(`<path d="${strokes.join('')}" stroke="#d8d8d8" stroke-width="1" fill="none" stroke-linecap="round"/>`);
+  if (edge !== 'hatch') out.push(...drawWalls(edge, { L, cell, oy, rng, ink: P.hatch, bg: P.bg ?? '#fff' }));
+  else out.push(`<path d="${strokes.join('')}" stroke="${P.hatch}" stroke-width="1" fill="none" stroke-linecap="round"/>`);
   // floor squares
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const i = y * w + x; if (!c[i]) continue;
     const X = x * cell, Y = y * cell + oy;
-    out.push(`<rect x="${X + 0.5}" y="${Y + 0.5}" width="${cell - 1}" height="${cell - 1}" fill="${theme.has(i) ? '#e9e4d4' : '#fafafa'}" stroke="#555" stroke-width="0.6"/>`);
-    if (theme.has(i)) out.push(`<path d="M${X + cell - 7} ${Y + cell - 3}l3 -5l3 5z" fill="#8a2a1a"/>`);
-    if (num?.has(i)) out.push(`<text x="${X + 2}" y="${Y + 7.5}" font-size="7" fill="#222">${num.get(i)}</text>`);
-    if (showAnswers && letters && letters[i] >= 0) out.push(`<text x="${X + cell / 2}" y="${Y + cell * 0.78}" font-size="${cell * 0.6}" text-anchor="middle" fill="#111">${String.fromCharCode(65 + letters[i])}</text>`);
+    out.push(`<rect x="${X + 0.5}" y="${Y + 0.5}" width="${cell - 1}" height="${cell - 1}" fill="${theme.has(i) ? P.adv : P.sq}" stroke="${P.grid}" stroke-width="0.6"/>`);
+    if (theme.has(i)) out.push(`<path d="M${X + cell - 7} ${Y + cell - 3}l3 -5l3 5z" fill="${P.mark}"/>`);
+    if (num?.has(i)) out.push(`<text x="${X + 2}" y="${Y + 7.5}" font-size="7" fill="${P.num}">${num.get(i)}</text>`);
+    if (showAnswers && letters && letters[i] >= 0) out.push(`<text x="${X + cell / 2}" y="${Y + cell * 0.78}" font-size="${cell * 0.6}" text-anchor="middle" fill="${P.letter}">${String.fromCharCode(65 + letters[i])}</text>`);
   }
   out.push('</svg>');
   return out.join('\n');
 }
 </script>
-<script>// UI for the standalone Cave Crossword page. ENGINE globals (makeRng, caveLayout, WordIndex,
+<script>// UI for the standalone Cave Crossword page. ENGINE globals (makeRng, ENVS, WordIndex,
 // fillWithRock, numberSlots, renderSVG, BLOCK) come from the inline engine script.
 const $ = (id) => document.getElementById(id);
 const DATA = $('data').textContent;
@@ -77779,13 +78135,14 @@ function workerMain() {
     }
   };
 }
-function generate(index, { seed, w, h, theme }, progress) {
+function generate(index, { seed, w, h, theme, env }, progress) {
+  const E = ENVS[env] || ENVS.cave;
   let res = null, L = null, attempt = 0;
   for (; attempt < 8 && !res?.ok; attempt++) {
     const rng = makeRng(seed * 1000 + attempt);
-    L = caveLayout({ w, h, rng });
-    progress(`Carving cave ${attempt + 1}…`);
-    res = fillWithRock(L, index, { rng, seedWords: theme, onRock: (k) => progress(`Cave ${attempt + 1}: shoring up rock (${k + 1})…`) }, 30);
+    L = E.layout({ w, h, rng });
+    progress(`Carving ${E.noun} ${attempt + 1}…`);
+    res = fillWithRock(L, index, { rng, seedWords: theme, onRock: (k) => progress(`${E.name} ${attempt + 1}: adjusting the map (${k + 1})…`) }, 30);
   }
   if (!res.ok) return { ok: false };
   return { ok: true, w: L.w, h: L.h, c: [...L.c], letters: [...res.letters],
@@ -77805,14 +78162,14 @@ function readTheme() {
 
 function go() {
   if (busy) return;
-  busy = true; $('gen').disabled = true; $('status').textContent = 'Carving cave…';
+  busy = true; $('gen').disabled = true; $('status').textContent = `Carving ${ENVS[$('env').value].noun}…`;
   const sz = { small: [26, 18], medium: [34, 22], large: [40, 26] }[$('size').value];
-  const msg = { type: 'gen', seed: +$('seed').value || 1, w: sz[0], h: sz[1], theme: readTheme() };
+  const msg = { type: 'gen', seed: +$('seed').value || 1, w: sz[0], h: sz[1], theme: readTheme(), env: $('env').value };
   const t0 = performance.now();
   const finish = (r) => {
     busy = false; $('gen').disabled = false;
-    if (!r.ok) { $('status').textContent = 'That cave would not fill. Try another seed or a smaller size.'; return; }
-    state = { ...r, theme: msg.theme, seed: msg.seed, edits: new Map() };
+    if (!r.ok) { $('status').textContent = `That ${ENVS[msg.env].noun} would not fill. Try another seed or a smaller size.`; return; }
+    state = { ...r, theme: msg.theme, seed: msg.seed, env: msg.env, edits: new Map() };
     show();
     const placed = r.slots.filter(s => msg.theme.includes(s.word)).length;
     $('status').textContent = `${r.slots.length} words on ${r.c.filter(Boolean).length} squares in ${((performance.now() - t0) / 1000).toFixed(1)} s` +
@@ -77840,8 +78197,10 @@ function show() {
   const themeCells = new Set();
   for (const s of slots) if (state.theme.includes(s.word)) s.cells.forEach(c => themeCells.add(c));
   const svg = renderSVG(L, { num, letters: Int8Array.from(state.letters), theme: themeCells, rng: makeRng(state.seed * 7 + 3),
-    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked });
+    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked, edge: ENVS[state.env || 'cave'].edge });
   $('map').innerHTML = svg;
+  $('mapPrint').innerHTML = renderSVG(L, { num, letters: Int8Array.from(state.letters), theme: themeCells, rng: makeRng(state.seed * 7 + 3),
+    title: $('title').value.trim().toUpperCase(), showAnswers: $('answers').checked, paper: true, edge: ENVS[state.env || 'cave'].edge });
   state.svg = svg;
   for (const dir of [0, 1]) {
     const ol = $(dir ? 'down' : 'across'); ol.replaceChildren();

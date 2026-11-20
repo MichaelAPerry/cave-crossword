@@ -11,3 +11,8 @@
 | 2026-11-19 | Offline WordNet clue module (`tools/build_clues.mjs`, `src/clues.mjs`) | codex |
 | 2026-11-19 | Cave crossword dungeon generator (`src/cavexword/`, `tools/cavexword.mjs`): CA cave, bitset MRV filler that adds rock on failure, ink-style SVG, clue sheet; clue sense/truncation fixes | claude |
 | 2026-11-19 | Switched clues to the xd crossword corpus (11.6M clues, filtered for standalone clues); frequent crossword answers added to fill vocabulary (large caves now fill without added rock); local clue run stopped at 1,915 | claude |
+
+## 2026-11-20 — print fix + environments (sonnet subagents, claude editor)
+- sonnet subagent: `paper` palette in renderSVG; print-only paper map (#mapPrint); print CSS fits map + all clues on one sheet (verified printToPDF: 1 page Letter and A4, 3 seeds at Large).
+- sonnet subagent: Environment selector — Cave, Dungeon (rooms, pillars, masonry walls), Overgrown forest (clearings + paths, canopy crowns), Flooded ruins (platforms + causeways, shoreline and ripples). New src/cavexword/envs.mjs (layouts + softLegalize), walls.mjs (wall styles). Fill stats: 100% over 10 seeds × 3 sizes for every env.
+- claude: review of screen and print renders per env; redrew tree-crown shading (the original inner marks read as faces).
