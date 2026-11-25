@@ -4,7 +4,7 @@
 
 ![A generated cave crossword: hatched rock walls around numbered crossword squares, with adventure words marked](docs/cave-crossword.png)
 
-**[Try it in your browser](https://michaelaperry.github.io/cave-crossword/)**, or download [`dist/cave-crossword.html`](dist/cave-crossword.html). It's a single 4 MB file that works offline and sends nothing anywhere.
+**[Try it in your browser](https://michaelaperry.github.io/cave-crossword/)**, or download [`dist/cave-crossword.html`](dist/cave-crossword.html). The single-file download works offline.
 
 ## What it does
 - **Carves a cave** with a cellular automaton (the classic cave-smoothing rule), then reshapes it so every run of squares is a legal crossword entry.
