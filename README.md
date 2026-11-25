@@ -4,19 +4,19 @@
 
 ![A generated cave crossword: hatched rock walls around numbered crossword squares, with adventure words marked](docs/cave-crossword.png)
 
-**[Try it in your browser](https://michaelaperry.github.io/cave-crossword/)**, or download [`dist/cave-crossword.html`](dist/cave-crossword.html). It's a single 4 MB file that works offline and sends nothing anywhere.
+**[Try it in your browser](https://michaelaperry.github.io/cave-crossword/)**, or download [`dist/cave-crossword.html`](dist/cave-crossword.html). The single-file download works offline.
 
 ## What it does
 - **Carves a cave** with a cellular automaton (the classic cave-smoothing rule), then reshapes it so every run of squares is a legal crossword entry.
 - **Fills it with real words.** A constraint solver places words; when a region can't be filled, it adds rock and tries again.
 - **Hides your adventure words** (DRAGON, KEY, ALTAR…) in the map and marks their squares ▲. The DM reveals what a room holds when its word is solved.
-- **Uses real crossword clues.** It draws on the [xd corpus](https://xd.saul.pw): 11.6 million clues from published crosswords, filtered to clues that make sense outside their original puzzle. Princeton WordNet fills any gaps. Every clue is editable, and ↻ cycles through alternatives.
+- **Clues are editable.** A build from the checked-in data uses locally written clues and Princeton WordNet glosses. The optional developer workflow can add filtered clues from the [xd corpus](https://xd.saul.pw). Use ↻ to cycle through alternatives where available.
 - **Four environments:** cave, dungeon (rooms, pillars and masonry walls), overgrown forest (clearings and winding paths) and flooded ruins (platforms and causeways). Each has its own layout generator and hand-inked edge style.
 - **Prints on one sheet.** The printout uses a black-on-white version of the map, with all the clues below it.
 - **Same seed, same map.** Maps are fully reproducible.
 
 ## Use it
-Browser: open `dist/cave-crossword.html`, enter a title and adventure words, then click Generate. Save the map as SVG, save the puzzle sheet, or print.
+Open the [browser version](https://michaelaperry.github.io/cave-crossword/) or download `dist/cave-crossword.html` for offline use. Pick an environment, enter your adventure words, then choose Generate. Edit any clues before printing the puzzle sheet. Save the seed with the puzzle so you can recreate the map.
 
 Command line (Node ≥ 20, no dependencies):
 ```sh
@@ -51,6 +51,6 @@ Code: [MIT](LICENSE).
 
 ## Data licences
 - Word lists: SCOWL (permissive) and ENABLE (public domain).
-- Clues: the [xd corpus](https://xd.saul.pw) by Saul Pwanson. The clues were written by the constructors and editors of the original puzzles, and xd has no data licence, so `npm run data` downloads it rather than the repo storing it. Fallback clues come from Princeton WordNet 3.0.
+- Clues: locally written clues and Princeton WordNet 3.0 glosses are checked in. The optional xd data is generated from the corpus maintained by Saul Pwanson. The standalone builder embeds xd clues when the optional TSV is present. Review the corpus terms and the copyright in the original clues before distributing a build that includes them.
 
 Notices are in [`data/LICENSES.md`](data/LICENSES.md).
